@@ -8,6 +8,8 @@ public class NPCController : MonoBehaviour {
     private SteeringBehavior ai;    // Put all the brains for steering in its own module
     private Rigidbody rb;           // You'll need this for dynamic steering
 
+    private NPCController target;
+
     // For speed 
     public Vector3 position;        // local pointer to the RigidBody's Location vector
     public Vector3 velocity;        // Will be needed for dynamic steering
@@ -34,19 +36,32 @@ public class NPCController : MonoBehaviour {
         orientation = transform.eulerAngles.y;
     }
 
+    public void NewTarget(NPCController newTarget)
+    {
+        target = newTarget;
+    }
+
     /// <summary>
     /// Depending on the phase the demo is in, have the agent do the appropriate steering.
     /// 
     /// </summary>
     void FixedUpdate() {
         switch (mapState) {
+            case 0:
+                if (label)
+                {
+                    // replace "First algorithm" with the name of the actual algorithm you're demoing
+                    // do this for each phase
+                    label.text = name.Replace("(Clone)", "") + "\nAt Rest";
+                }
+                break;
             case 1:
                 if (label) {
                     // replace "First algorithm" with the name of the actual algorithm you're demoing
                     // do this for each phase
                     label.text = name.Replace("(Clone)","") + "\nAlgorithm: Dynamic Seek"; 
                 }
-
+                ai.SetTarget(target);
                 linear = ai.Seek();
                 angular = ai.Face(orientation,linear);
                 break;
@@ -55,7 +70,7 @@ public class NPCController : MonoBehaviour {
                 if (label) {
                     label.text = name.Replace("(Clone)", "") + "\nAlgorithm: Dynamic Flee";
                 }
-
+                ai.SetTarget(target);
                 linear = ai.Flee();
                 angular = ai.Face(orientation, linear);
                 break;

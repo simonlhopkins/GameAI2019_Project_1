@@ -58,10 +58,10 @@ public class PhaseManager : MonoBehaviour {
     void Start() {
         narrator.text = "This is the place to mention major things going on during the demo, the \"narration.\"";
         spawnedNPCs = new List<GameObject>();
-        spawnedNPCs.Add(SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 1));
+        spawnedNPCs.Add(SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 0));
 
-        Invoke("SpawnWolf", 12);
-        Invoke("Meeting1", 30);
+        Invoke("SpawnWolf", 6);
+        Invoke("Meeting1", 12);
     }
 
     /// <summary>
@@ -184,12 +184,15 @@ public class PhaseManager : MonoBehaviour {
     private void SpawnWolf()
     {
         narrator.text = "The Wolf appears. Most wolves are ferocious, but this one is docile.";
-        spawnedNPCs.Add(SpawnItem(spawner2, WolfPrefab, null, SpawnText2, 4));
+        spawnedNPCs.Add(SpawnItem(spawner2, WolfPrefab, null, SpawnText2, 0));
     }
     private void Meeting1 ()
     {
         narrator.text = "The Wolf and Hunter meet...";
-        // put more actions in here
+        spawnedNPCs[0].GetComponent<NPCController>().NewTarget(spawnedNPCs[1].GetComponent<NPCController>());
+        spawnedNPCs[0].GetComponent<NPCController>().mapState = 1;
+        spawnedNPCs[1].GetComponent<NPCController>().NewTarget(spawnedNPCs[0].GetComponent<NPCController>());
+        spawnedNPCs[1].GetComponent<NPCController>().mapState = 2;
     }
 
     // Here is an example of a method you might want for when an arrival actually happens.

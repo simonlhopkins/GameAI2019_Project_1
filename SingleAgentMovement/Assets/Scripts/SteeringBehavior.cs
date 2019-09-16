@@ -21,7 +21,7 @@ public class SteeringBehavior : MonoBehaviour {
     public float maxAcceleration;
 
     // For arrive function
-    public float maxSpeed;
+    public float maxSpeed = 1.0f;
     public float targetRadiusL;
     public float slowRadiusL;
     public float timeToTarget;
@@ -45,6 +45,11 @@ public class SteeringBehavior : MonoBehaviour {
     protected void Start() {
         agent = GetComponent<NPCController>();
         //wanderOrientation = agent.orientation;
+    }
+
+    public void SetTarget(NPCController newTarget)
+    {
+        target = newTarget;
     }
 
     public float Face(float currentOrientation, Vector3 velocity)

@@ -58,7 +58,7 @@ public class PhaseManager : MonoBehaviour {
     void Start() {
         narrator.text = "This is the place to mention major things going on during the demo, the \"narration.\"";
         spawnedNPCs = new List<GameObject>();
-        spawnedNPCs.Add(SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 4));
+        spawnedNPCs.Add(SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 1));
 
         Invoke("SpawnWolf", 12);
         Invoke("Meeting1", 30);

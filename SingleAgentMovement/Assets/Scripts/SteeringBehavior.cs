@@ -47,4 +47,58 @@ public class SteeringBehavior : MonoBehaviour {
         //wanderOrientation = agent.orientation;
     }
 
+    public float Face(float currentOrientation, Vector3 velocity)
+    {
+        if(velocity.magnitude > 0)
+        {
+            return Mathf.Atan2(-velocity.x, velocity.z);
+        }
+        else
+        {
+            return currentOrientation;
+        }
+    }
+
+    public Vector3 Seek()
+    {
+        Vector3 velocity = target.position - transform.position;
+        velocity.Normalize();
+        velocity *= maxSpeed;
+        return velocity;
+    }
+
+    public Vector3 Flee()
+    {
+        Vector3 velocity = transform.position - target.position;
+        velocity.Normalize();
+        velocity *= maxSpeed;
+        return velocity;
+    }
+    /*
+    public Vector3 PursueArrive()
+    {
+
+    }
+
+    public Vector3 Evade()
+    {
+
+    }
+
+    public Vector3 Align()
+    {
+
+    }
+
+    public Vector3 Face()
+    {
+
+    }
+
+    public Vector3 Wander()
+    {
+
+    }
+    */
+
 }

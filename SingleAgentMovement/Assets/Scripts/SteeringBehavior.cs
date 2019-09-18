@@ -54,14 +54,23 @@ public class SteeringBehavior : MonoBehaviour {
 
     public float Face(float currentOrientation, Vector3 velocity)
     {
-        if(velocity.magnitude > 0)
+
+        Debug.DrawRay(transform.position, velocity*5f, Color.red);
+        if (velocity.magnitude > 0)
         {
             return Mathf.Atan2(-velocity.x, velocity.z);
+
         }
         else
         {
             return currentOrientation;
         }
+
+
+
+
+
+
     }
 
     public Vector3 Seek()
@@ -69,6 +78,8 @@ public class SteeringBehavior : MonoBehaviour {
         Vector3 velocity = target.position - transform.position;
         velocity.Normalize();
         velocity *= maxSpeed;
+
+
         return velocity;
     }
 

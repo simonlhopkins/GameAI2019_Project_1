@@ -138,8 +138,9 @@ public class NPCController : MonoBehaviour {
     /// <param name="time"></param>
     private void UpdateMovement(Vector3 steeringlin, float steeringang, float time) {
         // Update the orientation, velocity and rotation
-        rotation = steeringang;
-        orientation = rotation;
+
+        rotation = steeringang * time;
+        orientation += rotation * time;
         velocity += steeringlin * time;
 
         if (velocity.magnitude > maxSpeed) {
@@ -150,6 +151,7 @@ public class NPCController : MonoBehaviour {
         rb.AddForce(velocity - rb.velocity, ForceMode.VelocityChange);
         position = rb.position;
         rb.MoveRotation(Quaternion.Euler(new Vector3(0, Mathf.Rad2Deg * orientation, 0)));
+        Debug.Log(Mathf.Rad2Deg * orientation);
     }
 
     // <summary>

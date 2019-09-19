@@ -63,8 +63,8 @@ public class NPCController : MonoBehaviour {
                 }
                 ai.SetTarget(target);
                 linear = ai.Seek();
-                angular = ai.Face(orientation,linear);
-                Debug.Log(angular);
+                angular = ai.Face(rotation,linear);
+                //Debug.Log(angular);
                 break;
 
             case 2:
@@ -139,9 +139,12 @@ public class NPCController : MonoBehaviour {
     private void UpdateMovement(Vector3 steeringlin, float steeringang, float time) {
         // Update the orientation, velocity and rotation
 
-        rotation = steeringang * time;
-        orientation += rotation * time;
+        //Debug.Log(Mathf.Rad2Deg * orientation);
+        //steeringang = Mathf.Rad2Deg * steeringang;
+        //orientation += rotation * time + 0.5f * steeringang * time * time;
         velocity += steeringlin * time;
+        rotation = steeringang;
+        //rotation = steeringang * time;
 
         if (velocity.magnitude > maxSpeed) {
             velocity.Normalize();
@@ -150,8 +153,8 @@ public class NPCController : MonoBehaviour {
 
         rb.AddForce(velocity - rb.velocity, ForceMode.VelocityChange);
         position = rb.position;
-        rb.MoveRotation(Quaternion.Euler(new Vector3(0, Mathf.Rad2Deg * orientation, 0)));
-        Debug.Log(Mathf.Rad2Deg * orientation);
+        rb.MoveRotation(Quaternion.Euler(new Vector3(0, steeringang, 0)));
+        
     }
 
     // <summary>

@@ -56,12 +56,13 @@ public class PhaseManager : MonoBehaviour {
     // spawnedNPCs list. You can always add/remove NPCs later on.
 
     void Start() {
-        narrator.text = "This is the place to mention major things going on during the demo, the \"narration.\"";
+        narrator.text = "We see the hunter, waiting for its prey to appear";
         spawnedNPCs = new List<GameObject>();
         spawnedNPCs.Add(SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 0));
 
-        Invoke("SpawnWolf", 3);
-        Invoke("Meeting1", 5);
+        Invoke("SpawnWolf", 1);
+        Invoke("Meeting1", 2);
+
     }
 
     /// <summary>
@@ -183,7 +184,7 @@ public class PhaseManager : MonoBehaviour {
 
     private void SpawnWolf()
     {
-        narrator.text = "The Wolf appears. Most wolves are ferocious, but this one is docile.";
+        narrator.text = "The hunter's prey appears, and the hunter begins chasing it. The prey flees, but is ultimately trapped into a corner.";
         spawnedNPCs.Add(SpawnItem(spawner2, WolfPrefab, null, SpawnText2, 0));
     }
     private void Meeting1 ()

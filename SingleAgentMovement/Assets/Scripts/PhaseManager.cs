@@ -60,8 +60,8 @@ public class PhaseManager : MonoBehaviour {
         spawnedNPCs = new List<GameObject>();
         spawnedNPCs.Add(SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 0));
 
-        Invoke("SpawnWolf", 6);
-        Invoke("Meeting1", 12);
+        Invoke("SpawnWolf", 3);
+        Invoke("Meeting1", 5);
     }
 
     /// <summary>

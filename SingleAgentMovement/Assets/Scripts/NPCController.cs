@@ -178,16 +178,24 @@ public class NPCController : MonoBehaviour {
         }
 
 
-        //rb.position += _linear * _angular * time; ;
+        //rb.position += _linear * time;
+
+
         rb.rotation = Quaternion.Euler(Vector3.up * -rotation);
         //update the position variable to new position;
-        position = rb.position;
 
 
 
-        rb.AddForce(_linear * time, ForceMode.VelocityChange);
-        rb.velocity = Vector3.Normalize(rb.velocity) * maxSpeed;
+
+        rb.AddForce(_linear * _angular * time, ForceMode.VelocityChange);
+        if(rb.velocity.magnitude> maxSpeed)
+        {
+            rb.velocity = Vector3.Normalize(rb.velocity) * maxSpeed;
+        }
+        //
+        Debug.DrawRay(position, _linear, Color.magenta);
         velocity = rb.velocity;
+        position = rb.position;
         //if (rb.velocity.magnitude < maxSpeed) {
         //    rb.AddForce(_linear * _angular, ForceMode.VelocityChange);
         //}

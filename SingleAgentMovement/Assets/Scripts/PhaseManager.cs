@@ -265,10 +265,13 @@ public class PhaseManager : MonoBehaviour {
         spawnedNPCs[1].GetComponent<NPCController>().NewTarget(spawnedNPCs[0].GetComponent<NPCController>());
         //sets the map state of the wolf to flee from the hunter
         spawnedNPCs[1].GetComponent<NPCController>().mapState = 2;
-        Invoke("Number3", 10);
+
+        Invoke("Number3", 40);
     }
     private void Number3()
     {
+
+
         narrator.text = "After its feast, the hunter dozes in the field, intent on waking up if more prey appears.";
         spawnedNPCs[0].GetComponent<NPCController>().mapState = 0;
         GameObject wolf = spawnedNPCs[1];

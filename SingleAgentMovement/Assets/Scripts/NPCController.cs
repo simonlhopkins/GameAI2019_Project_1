@@ -55,6 +55,7 @@ public class NPCController : MonoBehaviour {
                     // do this for each phase
                     label.text = name.Replace("(Clone)", "") + "\nAt Rest";
                 }
+                velocity = Vector3.zero;
                 break;
             case 1:
 
@@ -129,8 +130,8 @@ public class NPCController : MonoBehaviour {
                     label.text = name.Replace("(Clone)", "") + "\nAlgorithm: Dynamic Wander";
                 }
 
-                angular = ai.Face(rotation, linear);
-                linear = ai.Wander(linear);
+                //rotation = ai.Face(rotation, linear);
+                velocity = ai.Wander(velocity);
                 break;
 
                 // ADD CASES AS NEEDED

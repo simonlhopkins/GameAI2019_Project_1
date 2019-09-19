@@ -58,7 +58,7 @@ public class PhaseManager : MonoBehaviour {
     void Start() {
         narrator.text = "We see the hunter, waiting for its prey to appear";
         spawnedNPCs = new List<GameObject>();
-        spawnedNPCs.Add(SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 7));
+        spawnedNPCs.Add(SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 0));
 
         Invoke("Number1", 5);
     }
@@ -142,7 +142,7 @@ public class PhaseManager : MonoBehaviour {
 
     private void EnterMapStateTwo()
     {
-        narrator.text = "Entering MapState Two";
+        narrator.text = "In MapState Two, we're going to demonstrate the align behavior. The hunter will align to the prey, who will rotate randomly.";
 
         // Align
 
@@ -152,7 +152,7 @@ public class PhaseManager : MonoBehaviour {
     }
     private void EnterMapStateThree()
     {
-        narrator.text = "Entering MapState Three";
+        narrator.text = "In MapState Three, we're going to demonstrate the face behavior. The hunter will face the prey, who will wander around.";
 
         // Face
 
@@ -228,7 +228,7 @@ public class PhaseManager : MonoBehaviour {
         spawnedNPCs[0].GetComponent<NPCController>().mapState = 0;
         GameObject wolf = spawnedNPCs[1];
         spawnedNPCs.RemoveAt(1);
-        Destroy(wolf);
+        wolf.SetActive(false);
         Invoke("Number4", 5);
     }
 
@@ -236,13 +236,15 @@ public class PhaseManager : MonoBehaviour {
     {
         narrator.text = "While the hunter sleeps, more prey appears, and begins grazing acorss the fields.";
         spawnedNPCs.Add(SpawnItem(spawner3, RedPrefab, null, SpawnText3, 7));
+        spawnedNPCs[1].GetComponent<NPCController>().NewTarget(spawnedNPCs[0].GetComponent<NPCController>());
         Invoke("Number5", 5);
     }
 
     private void Number5()
     {
         narrator.text = "Seeing more prey, the hunter awakens and begins its chase again.";
-        spawnedNPCs[0].GetComponent<NPCController>().mapState = 0;
+        spawnedNPCs[0].GetComponent<NPCController>().NewTarget(spawnedNPCs[1].GetComponent<NPCController>());
+        spawnedNPCs[0].GetComponent<NPCController>().mapState = 1;
         Invoke("Number6", 5);
     }
 

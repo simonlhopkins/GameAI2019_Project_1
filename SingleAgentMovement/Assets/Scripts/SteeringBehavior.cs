@@ -90,12 +90,12 @@ public class SteeringBehavior : MonoBehaviour {
         velocity *= maxSpeed;
         return velocity;
     }
-    /*
+
     public Vector3 PursueArrive()
     {
-
+        return Vector3.zero;
     }
-
+    /*
     public Vector3 Evade()
     {
 

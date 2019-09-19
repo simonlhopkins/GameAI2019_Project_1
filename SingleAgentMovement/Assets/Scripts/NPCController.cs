@@ -63,7 +63,7 @@ public class NPCController : MonoBehaviour {
                 }
                 ai.SetTarget(target);
                 linear = ai.Seek();
-                angular = ai.Face(orientation,linear);
+                angular = 0f;
                 break;
 
             case 2:
@@ -76,9 +76,11 @@ public class NPCController : MonoBehaviour {
                 break;
 
             case 3:
+                //
                 if (label) {
                     label.text = name.Replace("(Clone)", "") + "\nAlgorithm: Third algorithm";
                 }
+                ai.SetTarget(target);
 
                 // linear = ai.whatever();  -- replace with the desired calls
                 // angular = ai.whatever();

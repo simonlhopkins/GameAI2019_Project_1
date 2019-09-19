@@ -58,10 +58,10 @@ public class PhaseManager : MonoBehaviour {
     void Start() {
         narrator.text = "We see the hunter, waiting for its prey to appear";
         spawnedNPCs = new List<GameObject>();
-        spawnedNPCs.Add(SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 0));
+        spawnedNPCs.Add(SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 7));
 
-        Invoke("SpawnWolf", 1);
-        Invoke("Meeting1", 2);
+        Invoke("SpawnWolf", 5);
+        Invoke("Meeting1", 6);
 
     }
 
@@ -185,15 +185,12 @@ public class PhaseManager : MonoBehaviour {
 
     private void SpawnWolf()
     {
-        narrator.text = "The hunter's prey appears, and the hunter begins chasing it. The prey flees, but is ultimately trapped into a corner.";
+        narrator.text = "The hunter's prey appears, simply grazing in the field, unaware of the danger it is about to face.";
         spawnedNPCs.Add(SpawnItem(spawner2, WolfPrefab, null, SpawnText2, 0));
     }
     private void Meeting1 ()
     {
-        //spawnedNPCs[0] is the hunter
-        //spawnedNPCs[1] is the wolf
-        narrator.text = "The Wolf and Hunter meet...";
-        //sets the target of the hunter to the wolf
+        narrator.text = "The hunter begins chasing its prey. The prey flees, but is ultimately trapped into a corner.";
         spawnedNPCs[0].GetComponent<NPCController>().NewTarget(spawnedNPCs[1].GetComponent<NPCController>());
         //sets the map state of the hunter to 1, which is seeking the target
         spawnedNPCs[0].GetComponent<NPCController>().mapState = 1;

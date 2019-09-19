@@ -37,6 +37,7 @@ public class SteeringBehavior : MonoBehaviour {
     public float wanderRadius;
     public float wanderRate;
     private float wanderOrientation;
+    public float startTime;
 
     // Holds the path to follow
     public GameObject[] Path;
@@ -59,16 +60,16 @@ public class SteeringBehavior : MonoBehaviour {
     public float Face(float currentOrientation, Vector3 velocity)
     {
 
-        Debug.DrawRay(transform.position, velocity*5f, Color.red);
+        //Debug.DrawRay(transform.position, velocity*5f, Color.red);
         if (velocity.magnitude > 0)
         {
-            Debug.Log(Mathf.Rad2Deg * Mathf.Atan2(velocity.x, velocity.z));
+            //Debug.Log(Mathf.Rad2Deg * Mathf.Atan2(velocity.x, velocity.z));
             return Mathf.Rad2Deg*Mathf.Atan2(velocity.x, velocity.z);
 
         }
         else
         {
-            Debug.Log("fail");
+            //Debug.Log("fail");
             return currentOrientation;
         }
     }
@@ -166,12 +167,36 @@ public class SteeringBehavior : MonoBehaviour {
     {
 
     }
-
-    public Vector3 Wander()
+    */
+    public Vector3 Wander(Vector3 current)
     {
 
+        startTime += Time.deltaTime;
+        if(startTime <= wanderRate)
+        {
+            return current;
+        }
+        startTime = 0;
+        Vector3 center = -transform.forward;
+        center.Normalize();
+        center *= wanderOffset;
+        //Debug.DrawRay(transform.position, center, Color.red);
+        GameObject middle = new GameObject();
+        Debug.Log("Middle:");
+        middle.transform.position = new Vector3(transform.position.x + center.x, transform.position.y, transform.position.z + center.z);
+        Debug.Log(middle.transform.position);
+        GameObject follow = new GameObject();
+        float angle = Random.Range(0.0f, 360.0f);
+        follow.transform.position = new Vector3(middle.transform.position.x + wanderRadius*Mathf.Sin(angle*Mathf.Deg2Rad), middle.transform.position.y, middle.transform.position.z + wanderRadius * Mathf.Cos(angle * Mathf.Deg2Rad));
+        //= Transform(transform.position.x + center.x,transform.position.y,transform.position.z + center.z);
+        Vector3 velocity = transform.position - follow.transform.position;
+        Debug.DrawRay(transform.position, velocity, Color.red);
+        velocity.Normalize();
+        velocity *= maxSpeed;
+        Destroy(follow);
+        Destroy(middle);
+        return velocity;
     }
-    */
     
 
 }

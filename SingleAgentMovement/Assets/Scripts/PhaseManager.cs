@@ -214,8 +214,11 @@ public class PhaseManager : MonoBehaviour {
     {
         narrator.text = "The hunter begins chasing its prey. The prey flees, but is ultimately trapped by the hunter.";
         spawnedNPCs[0].GetComponent<NPCController>().NewTarget(spawnedNPCs[1].GetComponent<NPCController>());
+        //sets the map state of the hunter to 1, which is seeking the target
         spawnedNPCs[0].GetComponent<NPCController>().mapState = 1;
+        //sets the target of the wolf to the hunter
         spawnedNPCs[1].GetComponent<NPCController>().NewTarget(spawnedNPCs[0].GetComponent<NPCController>());
+        //sets the map state of the wolf to flee from the hunter
         spawnedNPCs[1].GetComponent<NPCController>().mapState = 2;
         Invoke("Number3", 5);
     }

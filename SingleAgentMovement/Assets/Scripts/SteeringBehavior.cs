@@ -176,7 +176,7 @@ public class SteeringBehavior : MonoBehaviour {
     public SteeringData Wander(Vector3 current)
     {
 
-        float acceleration = 1.1f;
+        float acceleration = 0.1f;
         startTime += Time.deltaTime;
         if(startTime <= wanderRate)
         {
@@ -198,9 +198,10 @@ public class SteeringBehavior : MonoBehaviour {
         //= Transform(transform.position.x + center.x,transform.position.y,transform.position.z + center.z);
         Vector3 velocity = follow.transform.position - transform.position;
         //gameObject.GetComponent<LineRenderer>().
-        //Debug.DrawRay(transform.position, velocity, Color.red);
+        Debug.DrawRay(transform.position, velocity, Color.red);
         velocity.Normalize();
         velocity *= maxSpeed;
+        //gameObject.GetComponent<NPCController>().DrawLine(transform.position, follow.transform.position);
         Destroy(follow);
         Destroy(middle);
         return new SteeringData(velocity, acceleration);

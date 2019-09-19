@@ -251,7 +251,7 @@ public class PhaseManager : MonoBehaviour {
         GameObject character = SpawnItem(spawner2, WolfPrefab, null, SpawnText2, 7);
         spawnedNPCs.Add(character);
         character.GetComponent<NPCController>().label.enabled = true;
-        Invoke("Number2", 5);
+        Invoke("Number2", 15);
     }
     private void Number2 ()
     {

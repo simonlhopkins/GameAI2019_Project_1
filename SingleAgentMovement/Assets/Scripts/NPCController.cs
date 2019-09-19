@@ -28,12 +28,15 @@ public class NPCController : MonoBehaviour {
     public Text label;              // Used to displaying text nearby the agent as it moves around
     LineRenderer line;              // Used to draw circles and other things
 
+    bool stopped;
+
     private void Start() {
         ai = GetComponent<SteeringBehavior>();
         rb = GetComponent<Rigidbody>();
         line = GetComponent<LineRenderer>();
         position = rb.position;
         orientation = transform.eulerAngles.y;
+        stopped = false;
     }
 
     //sets a new target for the ai
@@ -55,7 +58,9 @@ public class NPCController : MonoBehaviour {
                     // do this for each phase
                     label.text = name.Replace("(Clone)", "") + "\nAt Rest";
                 }
-                velocity = Vector3.zero;
+                stopped = true;
+                linear = Vector3.zero;
+                angular = 0;
                 break;
             case 1:
 
@@ -65,6 +70,7 @@ public class NPCController : MonoBehaviour {
                     // do this for each phase
                     label.text = name.Replace("(Clone)","") + "\nAlgorithm: Dynamic Seek"; 
                 }
+                stopped = false;
                 ai.SetTarget(target);
 
                 linear = ai.Seek().velocity;
@@ -79,6 +85,7 @@ public class NPCController : MonoBehaviour {
                 if (label) {
                     label.text = name.Replace("(Clone)", "") + "\nAlgorithm: Dynamic Flee";
                 }
+                stopped = false;
                 ai.SetTarget(target);
                 //linear = ai.Flee();
                 //angular = ai.Face(orientation, linear);
@@ -95,6 +102,7 @@ public class NPCController : MonoBehaviour {
                 if (label) {
                     label.text = name.Replace("(Clone)", "") + "\nAlgorithm: Pursue with Arrive";
                 }
+                stopped = false;
                 //persue with arrive
                 ai.SetTarget(target);
                 //velocity = ai.PursueArrive();
@@ -111,7 +119,7 @@ public class NPCController : MonoBehaviour {
                 if (label) {
                     label.text = name.Replace("(Clone)", "") + "\nAlgorithm: Dynamic Evade";
                 }
-
+                stopped = false;
                 // linear = ai.whatever();  -- replace with the desired calls
                 // angular = ai.whatever();
                 break;
@@ -119,7 +127,7 @@ public class NPCController : MonoBehaviour {
                 if (label) {
                     label.text = name.Replace("(Clone)", "") + "\nAlgorithm: Dynamic Align";
                 }
-
+                stopped = false;
                 // linear = ai.whatever();  -- replace with the desired calls
                 // angular = ai.whatever();
                 break;
@@ -128,7 +136,7 @@ public class NPCController : MonoBehaviour {
                 {
                     label.text = name.Replace("(Clone)", "") + "\nAlgorithm: Dynamic Face";
                 }
-
+                stopped = false;
                 // linear = ai.whatever();  -- replace with the desired calls
                 // angular = ai.whatever();
                 break;
@@ -137,7 +145,7 @@ public class NPCController : MonoBehaviour {
                 {
                     label.text = name.Replace("(Clone)", "") + "\nAlgorithm: Dynamic Wander";
                 }
-
+                stopped = false;
                 //rotation = ai.Face(rotation, linear);
                 velocity = ai.Wander(velocity).velocity;
                 angular = ai.Wander(velocity).acceleration;
@@ -161,7 +169,12 @@ public class NPCController : MonoBehaviour {
     /// <param name="time"></param>
     private void UpdateMovement(Vector3 _linear, float _angular, float time) {
         // Update the orientation, velocity and rotation
-
+        if (stopped)
+        {
+            rb.velocity = Vector3.zero;
+            velocity = Vector3.zero;
+            return;
+        }
 
 
         //rb.position += _linear * _angular * time; ;

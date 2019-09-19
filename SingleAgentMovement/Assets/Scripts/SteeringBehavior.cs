@@ -176,7 +176,7 @@ public class SteeringBehavior : MonoBehaviour {
     public SteeringData Wander(Vector3 current)
     {
 
-        float acceleration = 0.1f;
+        float acceleration = 1.1f;
         startTime += Time.deltaTime;
         if(startTime <= wanderRate)
         {

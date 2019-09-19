@@ -132,9 +132,10 @@ public class PhaseManager : MonoBehaviour {
         foreach (GameObject character in spawnedNPCs)
         {
             character.GetComponent<NPCController>().label.enabled = false;
-            spawnedNPCs.Remove(character);
             character.SetActive(false);
         }
+
+        spawnedNPCs.Clear();
     }
 
     private void EnterMapStateZero()

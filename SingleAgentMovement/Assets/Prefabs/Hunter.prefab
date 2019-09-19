@@ -157,8 +157,8 @@ MonoBehaviour:
   targetRadiusA: 0.1
   slowRadiusA: 0.5
   wanderOffset: 5
-  wanderRadius: 1
-  wanderRate: 0.3
+  wanderRadius: 4
+  wanderRate: 0.5
   startTime: 0
   Path: []
   current: 0

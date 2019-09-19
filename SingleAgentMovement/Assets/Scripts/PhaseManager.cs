@@ -60,9 +60,7 @@ public class PhaseManager : MonoBehaviour {
         spawnedNPCs = new List<GameObject>();
         spawnedNPCs.Add(SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 7));
 
-        Invoke("SpawnWolf", 5);
-        Invoke("Meeting1", 6);
-
+        Invoke("Number1", 5);
     }
 
     /// <summary>
@@ -109,6 +107,12 @@ public class PhaseManager : MonoBehaviour {
                break;
 
            case 3:
+               EnterMapStateThree();
+               break;
+           case 4:
+               EnterMapStateFour();
+               break;
+           case 5:
                break;
 
             // ADD MORE CASES AS NEEDED
@@ -117,7 +121,9 @@ public class PhaseManager : MonoBehaviour {
 
     private void EnterMapStateZero()
     {
-        narrator.text = "In MapState Zero, we're going to ...";
+        narrator.text = "In MapState Zero, we're going to demonstrate both seek and flee. The hunter will seek, while the prey will flee.";
+
+        // Seek and flee
 
         //currentMapState = 2; // or whatever. Won't necessarily advance the phase every time
 
@@ -125,7 +131,9 @@ public class PhaseManager : MonoBehaviour {
     }
 
     private void EnterMapStateOne() {
-        narrator.text = "In MapState One, we're going to ...";
+        narrator.text = "In MapState One, we're going to demonstrate both pursue (with approach) and evade. The hunter will pursue, while the prey will evade.";
+
+        // Pursue and evade
 
         //currentMapState = 2; // or whatever. Won't necessarily advance the phase every time
 
@@ -136,7 +144,9 @@ public class PhaseManager : MonoBehaviour {
     {
         narrator.text = "Entering MapState Two";
 
-        currentMapState = 3; // or whatever. Won't necessarily advance the phase every time
+        // Align
+
+        //currentMapState = 3; // or whatever. Won't necessarily advance the phase every time
 
         //spawnedNPCs.Add(SpawnItem(spawner2, WolfPrefab, null, SpawnText2, 4));
     }
@@ -144,7 +154,19 @@ public class PhaseManager : MonoBehaviour {
     {
         narrator.text = "Entering MapState Three";
 
-        currentMapState = 2; // or whatever. Won't necessarily advance the phase every time
+        // Face
+
+        //currentMapState = 2; // or whatever. Won't necessarily advance the phase every time
+
+        //spawnedNPCs.Add(SpawnItem(spawner2, WolfPrefab, null, SpawnText2, 4));
+    }
+    private void EnterMapStateFour()
+    {
+        narrator.text = "In MapState Four, we're going to demonstrate dynamic wander. The prey will wander around the field.";
+
+        // Wander
+
+        //currentMapState = 2; // or whatever. Won't necessarily advance the phase every time
 
         //spawnedNPCs.Add(SpawnItem(spawner2, WolfPrefab, null, SpawnText2, 4));
     }
@@ -182,18 +204,71 @@ public class PhaseManager : MonoBehaviour {
     // You make them happen when you want to by using the Invoke() method.
     // These aren't needed for the first assignment.
 
-    private void SpawnWolf()
+    private void Number1()
     {
-        narrator.text = "The hunter's prey appears, simply grazing in the field, unaware of the danger it is about to face.";
-        spawnedNPCs.Add(SpawnItem(spawner2, WolfPrefab, null, SpawnText2, 0));
+        narrator.text = "The hunter's prey appears, simply grazing and wandering across the field, unaware of the danger it is about to face.";
+        spawnedNPCs.Add(SpawnItem(spawner2, WolfPrefab, null, SpawnText2, 7));
+        Invoke("Number2", 5);
     }
-    private void Meeting1 ()
+    private void Number2 ()
     {
-        narrator.text = "The hunter begins chasing its prey. The prey flees, but is ultimately trapped into a corner.";
+        narrator.text = "The hunter begins chasing its prey. The prey flees, but is ultimately trapped by the hunter.";
         spawnedNPCs[0].GetComponent<NPCController>().NewTarget(spawnedNPCs[1].GetComponent<NPCController>());
         spawnedNPCs[0].GetComponent<NPCController>().mapState = 1;
         spawnedNPCs[1].GetComponent<NPCController>().NewTarget(spawnedNPCs[0].GetComponent<NPCController>());
         spawnedNPCs[1].GetComponent<NPCController>().mapState = 2;
+        Invoke("Number3", 5);
+    }
+    private void Number3()
+    {
+        narrator.text = "After its feast, the hunter dozes in the field, intent on waking up if more prey appears.";
+        spawnedNPCs[0].GetComponent<NPCController>().mapState = 0;
+        GameObject wolf = spawnedNPCs[1];
+        spawnedNPCs.RemoveAt(1);
+        Destroy(wolf);
+        Invoke("Number4", 5);
+    }
+
+    private void Number4()
+    {
+        narrator.text = "While the hunter sleeps, more prey appears, and begins grazing acorss the fields.";
+        spawnedNPCs.Add(SpawnItem(spawner3, RedPrefab, null, SpawnText3, 7));
+        Invoke("Number5", 5);
+    }
+
+    private void Number5()
+    {
+        narrator.text = "Seeing more prey, the hunter awakens and begins its chase again.";
+        spawnedNPCs[0].GetComponent<NPCController>().mapState = 0;
+        Invoke("Number6", 5);
+    }
+
+    private void Number6()
+    {
+        narrator.text = "This prey, however, has evolved, and is able to evade its attacker.";
+        Invoke("Number7", 5);
+        //spawnedNPCs[1].GetComponent<NPCController>().mapState = 0; // this should the evade algorithm
+    }
+
+    private void Number7()
+    {
+        narrator.text = "Seeing this, the hunter adjusts its tactics, hoping to catch the prey bu surprise.";
+        //Invoke("Number8", 5);
+        //spawnedNPCs[1].GetComponent<NPCController>().mapState = 0; // this should the pursue arrive algorithm
+    }
+
+    private void Number8()
+    {
+        // ALIGN
+        //narrator.text = "Seeing this, the hunter adjusts its tactics, hoping to catch the prey bu surprise.";
+        //spawnedNPCs[1].GetComponent<NPCController>().mapState = 0; // this should the pursue arrive algorithm
+    }
+
+    private void Number9()
+    {
+        // FACE
+        //narrator.text = "Seeing this, the hunter adjusts its tactics, hoping to catch the prey bu surprise.";
+        //spawnedNPCs[1].GetComponent<NPCController>().mapState = 0; // this should the pursue arrive algorithm
     }
 
     // Here is an example of a method you might want for when an arrival actually happens.

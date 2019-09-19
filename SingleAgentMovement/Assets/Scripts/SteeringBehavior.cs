@@ -121,15 +121,15 @@ public class SteeringBehavior : MonoBehaviour {
         center *= wanderOffset;
         //Debug.DrawRay(transform.position, center, Color.red);
         GameObject middle = new GameObject();
-        Debug.Log("Middle:");
+        //Debug.Log("Middle:");
         middle.transform.position = new Vector3(transform.position.x + center.x, transform.position.y, transform.position.z + center.z);
-        Debug.Log(middle.transform.position);
+        //Debug.Log(middle.transform.position);
         GameObject follow = new GameObject();
         float angle = Random.Range(0.0f, 360.0f);
         follow.transform.position = new Vector3(middle.transform.position.x + wanderRadius*Mathf.Sin(angle*Mathf.Deg2Rad), middle.transform.position.y, middle.transform.position.z + wanderRadius * Mathf.Cos(angle * Mathf.Deg2Rad));
         //= Transform(transform.position.x + center.x,transform.position.y,transform.position.z + center.z);
         Vector3 velocity = transform.position - follow.transform.position;
-        Debug.DrawRay(transform.position, velocity, Color.red);
+        //Debug.DrawRay(transform.position, velocity, Color.red);
         velocity.Normalize();
         velocity *= maxSpeed;
         Destroy(follow);

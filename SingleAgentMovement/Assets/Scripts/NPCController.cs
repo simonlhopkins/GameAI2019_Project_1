@@ -116,8 +116,8 @@ public class NPCController : MonoBehaviour {
                     label.text = name.Replace("(Clone)", "") + "\nAlgorithm: Dynamic Wander";
                 }
 
-                angular = ai.Face(rotation, linear);
-                linear = ai.Wander();
+                //angular = ai.Face(rotation, linear);
+                linear = ai.Wander(linear);
                 break;
 
                 // ADD CASES AS NEEDED

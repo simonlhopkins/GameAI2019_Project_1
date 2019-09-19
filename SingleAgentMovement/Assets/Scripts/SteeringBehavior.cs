@@ -37,6 +37,7 @@ public class SteeringBehavior : MonoBehaviour {
     public float wanderRadius;
     public float wanderRate;
     private float wanderOrientation;
+    public float startTime;
 
     // Holds the path to follow
     public GameObject[] Path;
@@ -44,6 +45,7 @@ public class SteeringBehavior : MonoBehaviour {
 
     protected void Start() {
         agent = GetComponent<NPCController>();
+        startTime = 0.0f;
         //wanderOrientation = agent.orientation;
     }
 
@@ -105,11 +107,19 @@ public class SteeringBehavior : MonoBehaviour {
 
     }
     */
-    public Vector3 Wander()
+    public Vector3 Wander(Vector3 current)
     {
-        Vector3 center = transform.forward;
+
+        startTime += Time.deltaTime;
+        if(startTime <= wanderRate)
+        {
+            return current;
+        }
+        startTime = 0;
+        Vector3 center = -transform.forward;
         center.Normalize();
         center *= wanderOffset;
+        //Debug.DrawRay(transform.position, center, Color.red);
         GameObject middle = new GameObject();
         Debug.Log("Middle:");
         middle.transform.position = new Vector3(transform.position.x + center.x, transform.position.y, transform.position.z + center.z);
@@ -119,6 +129,7 @@ public class SteeringBehavior : MonoBehaviour {
         follow.transform.position = new Vector3(middle.transform.position.x + wanderRadius*Mathf.Sin(angle*Mathf.Deg2Rad), middle.transform.position.y, middle.transform.position.z + wanderRadius * Mathf.Cos(angle * Mathf.Deg2Rad));
         //= Transform(transform.position.x + center.x,transform.position.y,transform.position.z + center.z);
         Vector3 velocity = transform.position - follow.transform.position;
+        Debug.DrawRay(transform.position, velocity, Color.red);
         velocity.Normalize();
         velocity *= maxSpeed;
         Destroy(follow);

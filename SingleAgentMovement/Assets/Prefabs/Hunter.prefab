@@ -130,7 +130,7 @@ MonoBehaviour:
   orientation: 0
   rotation: 0
   maxSpeed: 4
-  phase: 0
+  mapState: 0
   label: {fileID: 0}
 --- !u!114 &114839489207466526
 MonoBehaviour:
@@ -158,7 +158,8 @@ MonoBehaviour:
   slowRadiusA: 0.5
   wanderOffset: 5
   wanderRadius: 1
-  wanderRate: 1
+  wanderRate: 0.3
+  startTime: 0
   Path: []
   current: 0
 --- !u!120 &120817520483779392

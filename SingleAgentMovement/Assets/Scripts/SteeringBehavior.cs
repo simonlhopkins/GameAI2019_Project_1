@@ -77,36 +77,33 @@ public class SteeringBehavior : MonoBehaviour {
     public SteeringData Seek()
     {
 
-        float acceleration = 0.01f;
+        float acceleration = 1f;
         Vector3 currentVel = agent.velocity;
         Vector3 desiredVel = Vector3.Normalize(target.position - agent.position) * maxSpeed;
         
         Vector3 steeringVel = desiredVel - currentVel;
-        Vector3 returnVelocity = Vector3.Normalize(currentVel + steeringVel) * maxSpeed;
+        Vector3 returnVelocity = (currentVel + steeringVel).normalized * maxSpeed;
         agent.rotation = Mathf.Atan2(-returnVelocity.x, returnVelocity.z) * Mathf.Rad2Deg;
 
         gameObject.GetComponent<NPCController>().DrawLine(agent.transform.position, target.position);
         Debug.Log(target.position);
-        Debug.DrawRay(agent.position, returnVelocity, Color.magenta);
+
         return new SteeringData(returnVelocity, acceleration);
     }
 
 
     public SteeringData Flee()
     {
-        float acceleration = 0.1f;
+        Debug.Log("flee");
+        float acceleration = 1f;
         Vector3 currentVel = agent.velocity;
-
         Vector3 desiredVel = Vector3.Normalize(target.position - agent.position) * maxSpeed;
+
         Vector3 steeringVel = desiredVel - currentVel;
+        Vector3 returnVelocity = (currentVel + steeringVel).normalized * maxSpeed;
+        agent.rotation = Mathf.Atan2(-returnVelocity.x, returnVelocity.z) * Mathf.Rad2Deg;
 
-
-        Vector3 returnVelocity = Vector3.Normalize(currentVel + steeringVel) * maxSpeed;
-
-
-        agent.rotation = Mathf.Atan2(returnVelocity.x, returnVelocity.z) * Mathf.Rad2Deg;
-
-
+        gameObject.GetComponent<NPCController>().DrawLine(agent.transform.position, target.position);
 
         return new SteeringData(-returnVelocity, acceleration);
     }

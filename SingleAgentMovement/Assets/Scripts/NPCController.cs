@@ -139,7 +139,8 @@ public class NPCController : MonoBehaviour {
                 }
 
                 //rotation = ai.Face(rotation, linear);
-                velocity = ai.Wander(velocity);
+                velocity = ai.Wander(velocity).velocity;
+                angular = ai.Wander(velocity).acceleration;
                 break;
 
                 // ADD CASES AS NEEDED

@@ -85,7 +85,7 @@ public class SteeringBehavior : MonoBehaviour {
         Vector3 returnVelocity = Vector3.Normalize(currentVel + steeringVel) * maxSpeed;
         agent.rotation = Mathf.Atan2(-returnVelocity.x, returnVelocity.z) * Mathf.Rad2Deg;
         gameObject.GetComponent<NPCController>().DrawLine(agent.transform.position, target.position);
-        return returnVelocity;
+        return new SteeringData(returnVelocity,acceleration);
     }
 
 
@@ -170,13 +170,14 @@ public class SteeringBehavior : MonoBehaviour {
 
     }
     */
-    public Vector3 Wander(Vector3 current)
+    public SteeringData Wander(Vector3 current)
     {
 
+        float acceleration = 0.1f;
         startTime += Time.deltaTime;
         if(startTime <= wanderRate)
         {
-            return current;
+            return new SteeringData(current, acceleration);
         }
         startTime = 0;
         Vector3 center = transform.forward;
@@ -199,7 +200,7 @@ public class SteeringBehavior : MonoBehaviour {
         velocity *= maxSpeed;
         Destroy(follow);
         Destroy(middle);
-        return velocity;
+        return new SteeringData(velocity, acceleration);
     }
 
     //public Vector3 evade() {

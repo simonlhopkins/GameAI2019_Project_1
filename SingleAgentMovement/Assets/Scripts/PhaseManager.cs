@@ -56,6 +56,7 @@ public class PhaseManager : MonoBehaviour {
     // spawnedNPCs list. You can always add/remove NPCs later on.
 
     void Start() {
+        spawnedNPCs = new List<GameObject>();
         Number0();
     }
 
@@ -126,43 +127,78 @@ public class PhaseManager : MonoBehaviour {
         }
     }
 
+    void Refresh()
+    {
+        foreach (GameObject character in spawnedNPCs)
+        {
+            character.GetComponent<NPCController>().label.enabled = false;
+            spawnedNPCs.Remove(character);
+            character.SetActive(false);
+        }
+    }
+
     private void EnterMapStateZero()
     {
+        Refresh();
         Number0();
     }
     private void EnterMapStateOne() {
+        Refresh();
+        GameObject character = SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 0);
+        spawnedNPCs.Add(character);
+        character.GetComponent<NPCController>().label.enabled = true;
         Number1();
     }
     private void EnterMapStateTwo()
     {
+        Refresh();
+        GameObject character = SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 0);
+        spawnedNPCs.Add(character);
+        character.GetComponent<NPCController>().label.enabled = true;
+        character = SpawnItem(spawner2, WolfPrefab, null, SpawnText2, 0);
+        spawnedNPCs.Add(character);
+        character.GetComponent<NPCController>().label.enabled = true;
         Number2();
     }
     private void EnterMapStateThree()
     {
+        Refresh();
+        GameObject character = SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 0);
+        spawnedNPCs.Add(character);
+        character.GetComponent<NPCController>().label.enabled = true;
+        character = SpawnItem(spawner2, WolfPrefab, null, SpawnText2, 0);
+        spawnedNPCs.Add(character);
+        character.GetComponent<NPCController>().label.enabled = true;
         Number3();
     }
     private void EnterMapStateFour()
     {
+        Refresh();
         Number4();
     }
     private void EnterMapStateFive()
     {
+        Refresh();
         Number5();
     }
     private void EnterMapStateSix()
     {
+        Refresh();
         Number6();
     }
     private void EnterMapStateSeven()
     {
+        Refresh();
         Number7();
     }
     private void EnterMapStateEight()
     {
+        Refresh();
         Number8();
     }
     private void EnterMapStateNine()
     {
+        Refresh();
         Number9();
     }
 
@@ -202,15 +238,18 @@ public class PhaseManager : MonoBehaviour {
     private void Number0()
     {
         narrator.text = "We see the hunter, waiting for its prey to appear";
-        spawnedNPCs = new List<GameObject>();
-        spawnedNPCs.Add(SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 0));
+        GameObject character = SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 0);
+        spawnedNPCs.Add(character);
+        character.GetComponent<NPCController>().label.enabled = true;
         Invoke("Number1", 5);
     }
 
     private void Number1()
     {
         narrator.text = "The hunter's prey appears, simply grazing and wandering across the field, unaware of the danger it is about to face.";
-        spawnedNPCs.Add(SpawnItem(spawner2, WolfPrefab, null, SpawnText2, 7));
+        GameObject character = SpawnItem(spawner2, WolfPrefab, null, SpawnText2, 7);
+        spawnedNPCs.Add(character);
+        character.GetComponent<NPCController>().label.enabled = true;
         Invoke("Number2", 5);
     }
     private void Number2 ()

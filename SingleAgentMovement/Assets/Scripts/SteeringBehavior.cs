@@ -78,18 +78,11 @@ public class SteeringBehavior : MonoBehaviour {
     {
 
         Vector3 currentVel = agent.velocity;
-
         Vector3 desiredVel = Vector3.Normalize(target.position - agent.position) * maxSpeed;
         Vector3 steeringVel = desiredVel - currentVel;
-
-
         Vector3 returnVelocity = Vector3.Normalize(currentVel + steeringVel) * maxSpeed;
-
-
         agent.rotation = Mathf.Atan2(-returnVelocity.x, returnVelocity.z) * Mathf.Rad2Deg;
-
-
-
+        gameObject.GetComponent<NPCController>().DrawLine(agent.transform.position, target.position);
         return returnVelocity;
     }
 
@@ -123,6 +116,8 @@ public class SteeringBehavior : MonoBehaviour {
 
         //Vector3 anticipatedTargetPos = target.position + (target.velocity * 10f);
         Vector3 desiredVel = target.position - agent.position;
+        // Should draw the circle around the target where we slow down
+        gameObject.GetComponent<NPCController>().DrawCircle(target.position, slowRadiusL);
         float distanceToTarget = (desiredVel).magnitude;
 
         Debug.Log(distanceToTarget);
@@ -143,6 +138,7 @@ public class SteeringBehavior : MonoBehaviour {
         // Set the steering based on this
         //steering
         Vector3 steeringVel = desiredVel - currentVel;
+        gameObject.GetComponent<NPCController>().DrawCircle(steeringVel, targetRadiusL);
 
 
         Vector3 returnVelocity = currentVel + steeringVel;
@@ -155,7 +151,7 @@ public class SteeringBehavior : MonoBehaviour {
     /*
     public Vector3 Evade()
     {
-
+        
     }
 
     public Vector3 Align()
@@ -177,19 +173,21 @@ public class SteeringBehavior : MonoBehaviour {
             return current;
         }
         startTime = 0;
-        Vector3 center = -transform.forward;
+        Vector3 center = transform.forward;
         center.Normalize();
         center *= wanderOffset;
         //Debug.DrawRay(transform.position, center, Color.red);
         GameObject middle = new GameObject();
         //Debug.Log("Middle:");
         middle.transform.position = new Vector3(transform.position.x + center.x, transform.position.y, transform.position.z + center.z);
+        gameObject.GetComponent<NPCController>().DrawCircle(middle.transform.position, wanderRadius);
         //Debug.Log(middle.transform.position);
         GameObject follow = new GameObject();
         float angle = Random.Range(0.0f, 360.0f);
         follow.transform.position = new Vector3(middle.transform.position.x + wanderRadius*Mathf.Sin(angle*Mathf.Deg2Rad), middle.transform.position.y, middle.transform.position.z + wanderRadius * Mathf.Cos(angle * Mathf.Deg2Rad));
         //= Transform(transform.position.x + center.x,transform.position.y,transform.position.z + center.z);
-        Vector3 velocity = transform.position - follow.transform.position;
+        Vector3 velocity = follow.transform.position - transform.position;
+        //gameObject.GetComponent<LineRenderer>().
         //Debug.DrawRay(transform.position, velocity, Color.red);
         velocity.Normalize();
         velocity *= maxSpeed;

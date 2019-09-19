@@ -148,7 +148,7 @@ MonoBehaviour:
   target: {fileID: 0}
   maxPrediction: 1
   maxAcceleration: 4
-  maxSpeed: 4
+  maxSpeed: 5
   targetRadiusL: 2
   slowRadiusL: 5
   timeToTarget: 0.1
@@ -156,8 +156,8 @@ MonoBehaviour:
   maxAngularAcceleration: 4
   targetRadiusA: 0.1
   slowRadiusA: 0.5
-  wanderOffset: 5
-  wanderRadius: 4
+  wanderOffset: 20
+  wanderRadius: 1.69
   wanderRate: 1
   startTime: 0
   Path: []

@@ -207,6 +207,14 @@ public class NPCController : MonoBehaviour {
         }
     }
 
+    public void DrawLine(Vector3 myPos, Vector3 position)
+    {
+        line.positionCount = 2;
+        line.useWorldSpace = true;
+        line.SetPosition(0, myPos);
+        line.SetPosition(1, position);
+    }
+
     /// <summary>
     /// This is used to help erase the prevously drawn line or circle
     /// </summary>

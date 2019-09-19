@@ -56,11 +56,7 @@ public class PhaseManager : MonoBehaviour {
     // spawnedNPCs list. You can always add/remove NPCs later on.
 
     void Start() {
-        narrator.text = "We see the hunter, waiting for its prey to appear";
-        spawnedNPCs = new List<GameObject>();
-        spawnedNPCs.Add(SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 0));
-
-        Invoke("Number1", 5);
+        Number0();
     }
 
     /// <summary>
@@ -113,62 +109,61 @@ public class PhaseManager : MonoBehaviour {
                EnterMapStateFour();
                break;
            case 5:
+               EnterMapStateFive();
                break;
-
-            // ADD MORE CASES AS NEEDED
-       }
+           case 6:
+               EnterMapStateSix();
+               break;
+           case 7:
+               EnterMapStateSeven();
+               break;
+           case 8:
+               EnterMapStateEight();
+               break;
+           case 9:
+               EnterMapStateNine();
+               break;
+        }
     }
 
     private void EnterMapStateZero()
     {
-        narrator.text = "In MapState Zero, we're going to demonstrate both seek and flee. The hunter will seek, while the prey will flee.";
-
-        // Seek and flee
-
-        //currentMapState = 2; // or whatever. Won't necessarily advance the phase every time
-
-        //spawnedNPCs.Add(SpawnItem(spawner2, WolfPrefab, null, SpawnText2, 4));
+        Number0();
     }
-
     private void EnterMapStateOne() {
-        narrator.text = "In MapState One, we're going to demonstrate both pursue (with approach) and evade. The hunter will pursue, while the prey will evade.";
-
-        // Pursue and evade
-
-        //currentMapState = 2; // or whatever. Won't necessarily advance the phase every time
-
-        //spawnedNPCs.Add(SpawnItem(spawner2, WolfPrefab, null, SpawnText2, 4));
+        Number1();
     }
-
     private void EnterMapStateTwo()
     {
-        narrator.text = "In MapState Two, we're going to demonstrate the align behavior. The hunter will align to the prey, who will rotate randomly.";
-
-        // Align
-
-        //currentMapState = 3; // or whatever. Won't necessarily advance the phase every time
-
-        //spawnedNPCs.Add(SpawnItem(spawner2, WolfPrefab, null, SpawnText2, 4));
+        Number2();
     }
     private void EnterMapStateThree()
     {
-        narrator.text = "In MapState Three, we're going to demonstrate the face behavior. The hunter will face the prey, who will wander around.";
-
-        // Face
-
-        //currentMapState = 2; // or whatever. Won't necessarily advance the phase every time
-
-        //spawnedNPCs.Add(SpawnItem(spawner2, WolfPrefab, null, SpawnText2, 4));
+        Number3();
     }
     private void EnterMapStateFour()
     {
-        narrator.text = "In MapState Four, we're going to demonstrate dynamic wander. The prey will wander around the field.";
-
-        // Wander
-
-        //currentMapState = 2; // or whatever. Won't necessarily advance the phase every time
-
-        //spawnedNPCs.Add(SpawnItem(spawner2, WolfPrefab, null, SpawnText2, 4));
+        Number4();
+    }
+    private void EnterMapStateFive()
+    {
+        Number5();
+    }
+    private void EnterMapStateSix()
+    {
+        Number6();
+    }
+    private void EnterMapStateSeven()
+    {
+        Number7();
+    }
+    private void EnterMapStateEight()
+    {
+        Number8();
+    }
+    private void EnterMapStateNine()
+    {
+        Number9();
     }
 
 
@@ -204,6 +199,14 @@ public class PhaseManager : MonoBehaviour {
     // You make them happen when you want to by using the Invoke() method.
     // These aren't needed for the first assignment.
 
+    private void Number0()
+    {
+        narrator.text = "We see the hunter, waiting for its prey to appear";
+        spawnedNPCs = new List<GameObject>();
+        spawnedNPCs.Add(SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 0));
+        Invoke("Number1", 5);
+    }
+
     private void Number1()
     {
         narrator.text = "The hunter's prey appears, simply grazing and wandering across the field, unaware of the danger it is about to face.";
@@ -220,7 +223,7 @@ public class PhaseManager : MonoBehaviour {
         spawnedNPCs[1].GetComponent<NPCController>().NewTarget(spawnedNPCs[0].GetComponent<NPCController>());
         //sets the map state of the wolf to flee from the hunter
         spawnedNPCs[1].GetComponent<NPCController>().mapState = 2;
-        Invoke("Number3", 5);
+        Invoke("Number3", 10);
     }
     private void Number3()
     {
@@ -257,7 +260,7 @@ public class PhaseManager : MonoBehaviour {
 
     private void Number7()
     {
-        narrator.text = "Seeing this, the hunter adjusts its tactics, hoping to catch the prey bu surprise.";
+        narrator.text = "Seeing this, the hunter adjusts its tactics, hoping to catch the prey by surprise.";
         //Invoke("Number8", 5);
         //spawnedNPCs[1].GetComponent<NPCController>().mapState = 0; // this should the pursue arrive algorithm
     }

@@ -77,15 +77,18 @@ public class SteeringBehavior : MonoBehaviour {
     public SteeringData Seek()
     {
 
-        float acceleration = 0.1f;
+        float acceleration = 0.01f;
         Vector3 currentVel = agent.velocity;
         Vector3 desiredVel = Vector3.Normalize(target.position - agent.position) * maxSpeed;
         
         Vector3 steeringVel = desiredVel - currentVel;
         Vector3 returnVelocity = Vector3.Normalize(currentVel + steeringVel) * maxSpeed;
         agent.rotation = Mathf.Atan2(-returnVelocity.x, returnVelocity.z) * Mathf.Rad2Deg;
+
         gameObject.GetComponent<NPCController>().DrawLine(agent.transform.position, target.position);
-        return returnVelocity;
+        Debug.Log(target.position);
+        Debug.DrawRay(agent.position, returnVelocity, Color.magenta);
+        return new SteeringData(returnVelocity, acceleration);
     }
 
 

@@ -109,7 +109,7 @@ public class PhaseManager : MonoBehaviour {
                break;
 
            case 3:
-                EnterMapStateThree();
+               EnterMapStateThree();
                break;
 
             // ADD MORE CASES AS NEEDED
@@ -201,7 +201,13 @@ public class PhaseManager : MonoBehaviour {
     }
 
     private void meeting3() {
+
+        if (spawnedNPCs.Count != 2) {
+            return;
+        }
         narrator.text = "pursue arrive debug";
+
+        
         //sets the target of the hunter to the wolf
         spawnedNPCs[0].GetComponent<NPCController>().NewTarget(spawnedNPCs[1].GetComponent<NPCController>());
         //sets the map state of the hunter to 1, which is seeking the target

@@ -65,8 +65,9 @@ public class NPCController : MonoBehaviour {
                     label.text = name.Replace("(Clone)","") + "\nAlgorithm: Dynamic Seek"; 
                 }
                 ai.SetTarget(target);
-                
-                velocity = ai.Seek();
+
+                linear = ai.Seek().velocity;
+                angular = ai.Seek().acceleration;
                 //linear = ai.Seek();
                 //angular = ai.Face(rotation,linear);
                 //Debug.Log(angular);
@@ -83,7 +84,9 @@ public class NPCController : MonoBehaviour {
                 //this is the new velocity that is added, which 
                 //pass in the current velocity, and it will return a new velocity based on that
                 //Debug.Log(velocity);
-                velocity = ai.Flee();
+
+                linear = ai.Flee().velocity;
+                angular = ai.Flee().acceleration;
                 break;
 
             case 3:
@@ -93,7 +96,12 @@ public class NPCController : MonoBehaviour {
                 }
                 //persue with arrive
                 ai.SetTarget(target);
-                velocity = ai.PursueArrive();
+                //velocity = ai.PursueArrive();
+
+                linear = ai.PursueArrive().velocity;
+                angular = ai.PursueArrive().acceleration;
+
+
                 // linear = ai.whatever();  -- replace with the desired calls
                 // angular = ai.whatever();
                 break;
@@ -153,10 +161,23 @@ public class NPCController : MonoBehaviour {
         // Update the orientation, velocity and rotation
 
 
+        Debug.Log("velocity right before update: " + _linear);
 
-        rb.position += velocity * time; ;
+        //rb.position += _linear * _angular * time; ;
         rb.rotation = Quaternion.Euler(Vector3.up * -rotation);
-        position = rb.position;
+        //update the position variable to new position;
+        //position = rb.position;
+
+
+
+        rb.AddForce(_linear * _angular, ForceMode.VelocityChange);
+        rb.velocity = Vector3.Normalize(rb.velocity) * maxSpeed;
+        velocity = rb.velocity;
+        //if (rb.velocity.magnitude < maxSpeed) {
+        //    rb.AddForce(_linear * _angular, ForceMode.VelocityChange);
+        //}
+
+
 
     }
 

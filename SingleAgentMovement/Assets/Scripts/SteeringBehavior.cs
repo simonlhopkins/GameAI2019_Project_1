@@ -74,13 +74,17 @@ public class SteeringBehavior : MonoBehaviour {
         }
     }
 
-    public Vector3 Seek()
+    public SteeringData Seek()
     {
 
+        float acceleration = 0.1f;
         Vector3 currentVel = agent.velocity;
 
         Vector3 desiredVel = Vector3.Normalize(target.position - agent.position) * maxSpeed;
+        
         Vector3 steeringVel = desiredVel - currentVel;
+
+
 
 
         Vector3 returnVelocity = Vector3.Normalize(currentVel + steeringVel) * maxSpeed;
@@ -90,13 +94,13 @@ public class SteeringBehavior : MonoBehaviour {
 
 
 
-        return returnVelocity;
+        return new SteeringData(returnVelocity, acceleration);
     }
 
 
-    public Vector3 Flee()
+    public SteeringData Flee()
     {
-
+        float acceleration = 0.1f;
         Vector3 currentVel = agent.velocity;
 
         Vector3 desiredVel = Vector3.Normalize(target.position - agent.position) * maxSpeed;
@@ -110,34 +114,38 @@ public class SteeringBehavior : MonoBehaviour {
 
 
 
-        return -returnVelocity;
+        return new SteeringData(-returnVelocity, acceleration);
     }
 
-    public Vector3 PursueArrive()
+    public SteeringData PursueArrive()
     {
         //target
         //float targetAngularAcceleration = target.a
         //anicipate 3 frames ahead
         //refactor with global vars
 
-
+        
         //Vector3 anticipatedTargetPos = target.position + (target.velocity * 10f);
         Vector3 desiredVel = target.position - agent.position;
         float distanceToTarget = (desiredVel).magnitude;
+
+        if (distanceToTarget < 0.1) {
+            return new SteeringData(Vector3.zero, 0);
+        }
 
         Debug.Log(distanceToTarget);
         Vector3 currentVel = agent.velocity;
 
         if (distanceToTarget < slowRadiusL){
             // Inside the slowing area
-            Debug.Log("inside slowing area!");
+
             desiredVel = Vector3.Normalize(desiredVel) * maxSpeed * (distanceToTarget / slowRadiusL);
+
         }
         else{
             // Outside the slowing area.
 
             desiredVel = Vector3.Normalize(desiredVel) * maxSpeed;
-            Debug.Log("desired Velocity is: " + desiredVel);
         }
 
         // Set the steering based on this
@@ -150,7 +158,7 @@ public class SteeringBehavior : MonoBehaviour {
 
         agent.rotation = Mathf.Atan2(-returnVelocity.x, returnVelocity.z) * Mathf.Rad2Deg;
         //could return an object
-        return returnVelocity;
+        return new SteeringData(returnVelocity, 0.1f); ;
     }
     /*
     public Vector3 Evade()
@@ -197,6 +205,22 @@ public class SteeringBehavior : MonoBehaviour {
         Destroy(middle);
         return velocity;
     }
-    
+
+    //public Vector3 evade() {
+
+    //    return -PursueArrive();
+    //}
 
 }
+
+public class SteeringData
+{
+    public Vector3 velocity;
+    public float acceleration;
+    public SteeringData(Vector3 _velocity, float _acceleration) {
+        velocity = _velocity;
+        acceleration = _acceleration;
+    }
+
+}
+

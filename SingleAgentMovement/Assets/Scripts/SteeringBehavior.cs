@@ -44,6 +44,10 @@ public class SteeringBehavior : MonoBehaviour {
 
     protected void Start() {
         agent = GetComponent<NPCController>();
+
+        //test for debug
+        slowRadiusL = 7f;
+        timeToTarget = 3f;
         //wanderOrientation = agent.orientation;
     }
 
@@ -71,23 +75,81 @@ public class SteeringBehavior : MonoBehaviour {
 
     public Vector3 Seek()
     {
-        Vector3 velocity = target.position - transform.position;
-        velocity.Normalize();
-        velocity *= maxSpeed;
-        return velocity;
+
+        Vector3 currentVel = agent.velocity;
+
+        Vector3 desiredVel = Vector3.Normalize(target.position - agent.position) * maxSpeed;
+        Vector3 steeringVel = desiredVel - currentVel;
+
+
+        Vector3 returnVelocity = Vector3.Normalize(currentVel + steeringVel) * maxSpeed;
+
+
+        agent.rotation = Mathf.Atan2(-returnVelocity.x, returnVelocity.z) * Mathf.Rad2Deg;
+
+
+
+        return returnVelocity;
     }
+
 
     public Vector3 Flee()
     {
-        Vector3 velocity = transform.position - target.position;
-        velocity.Normalize();
-        velocity *= maxSpeed;
-        return velocity;
+
+        Vector3 currentVel = agent.velocity;
+
+        Vector3 desiredVel = Vector3.Normalize(target.position - agent.position) * maxSpeed;
+        Vector3 steeringVel = desiredVel - currentVel;
+
+
+        Vector3 returnVelocity = Vector3.Normalize(currentVel + steeringVel) * maxSpeed;
+
+
+        agent.rotation = Mathf.Atan2(returnVelocity.x, returnVelocity.z) * Mathf.Rad2Deg;
+
+
+
+        return -returnVelocity;
     }
 
     public Vector3 PursueArrive()
     {
-        return Vector3.zero;
+        //target
+        //float targetAngularAcceleration = target.a
+        //anicipate 3 frames ahead
+        //refactor with global vars
+
+
+        //Vector3 anticipatedTargetPos = target.position + (target.velocity * 10f);
+        Vector3 desiredVel = target.position - agent.position;
+        float distanceToTarget = (desiredVel).magnitude;
+
+        Debug.Log(distanceToTarget);
+        Vector3 currentVel = agent.velocity;
+
+        if (distanceToTarget < slowRadiusL){
+            // Inside the slowing area
+            Debug.Log("inside slowing area!");
+            desiredVel = Vector3.Normalize(desiredVel) * maxSpeed * (distanceToTarget / slowRadiusL);
+        }
+        else{
+            // Outside the slowing area.
+
+            desiredVel = Vector3.Normalize(desiredVel) * maxSpeed;
+            Debug.Log("desired Velocity is: " + desiredVel);
+        }
+
+        // Set the steering based on this
+        //steering
+        Vector3 steeringVel = desiredVel - currentVel;
+
+
+        Vector3 returnVelocity = currentVel + steeringVel;
+
+
+        agent.rotation = Mathf.Atan2(-returnVelocity.x, returnVelocity.z) * Mathf.Rad2Deg;
+        //could return an object
+        return returnVelocity;
     }
     /*
     public Vector3 Evade()

@@ -109,6 +109,7 @@ public class PhaseManager : MonoBehaviour {
                break;
 
            case 3:
+                EnterMapStateThree();
                break;
 
             // ADD MORE CASES AS NEEDED
@@ -145,7 +146,7 @@ public class PhaseManager : MonoBehaviour {
         narrator.text = "Entering MapState Three";
 
         currentMapState = 2; // or whatever. Won't necessarily advance the phase every time
-
+        meeting3();
         //spawnedNPCs.Add(SpawnItem(spawner2, WolfPrefab, null, SpawnText2, 4));
     }
 
@@ -196,6 +197,18 @@ public class PhaseManager : MonoBehaviour {
         spawnedNPCs[0].GetComponent<NPCController>().NewTarget(spawnedNPCs[1].GetComponent<NPCController>());
         //sets the map state of the hunter to 1, which is seeking the target
         spawnedNPCs[0].GetComponent<NPCController>().mapState = 1;
+        //sets the target of the wolf to the hunter
+        spawnedNPCs[1].GetComponent<NPCController>().NewTarget(spawnedNPCs[0].GetComponent<NPCController>());
+        //sets the map state of the wolf to flee from the hunter
+        spawnedNPCs[1].GetComponent<NPCController>().mapState = 2;
+    }
+
+    private void meeting3() {
+        narrator.text = "pursue arrive debug";
+        //sets the target of the hunter to the wolf
+        spawnedNPCs[0].GetComponent<NPCController>().NewTarget(spawnedNPCs[1].GetComponent<NPCController>());
+        //sets the map state of the hunter to 1, which is seeking the target
+        spawnedNPCs[0].GetComponent<NPCController>().mapState = 3;
         //sets the target of the wolf to the hunter
         spawnedNPCs[1].GetComponent<NPCController>().NewTarget(spawnedNPCs[0].GetComponent<NPCController>());
         //sets the map state of the wolf to flee from the hunter

@@ -129,12 +129,13 @@ public class PhaseManager : MonoBehaviour {
 
     void Refresh()
     {
-        foreach (GameObject character in spawnedNPCs)
+        for(int i = spawnedNPCs.Count - 1;i>=0; i--)
         {
+            GameObject character = spawnedNPCs[i];
             character.GetComponent<NPCController>().label.enabled = false;
             character.SetActive(false);
+            Debug.Log("Deleted");
         }
-
         spawnedNPCs.Clear();
     }
 
@@ -149,6 +150,7 @@ public class PhaseManager : MonoBehaviour {
         spawnedNPCs.Add(character);
         character.GetComponent<NPCController>().label.enabled = true;
         Number1();
+        Debug.Log("Doing it");
     }
     private void EnterMapStateTwo()
     {
@@ -251,7 +253,7 @@ public class PhaseManager : MonoBehaviour {
         GameObject character = SpawnItem(spawner2, WolfPrefab, null, SpawnText2, 7);
         spawnedNPCs.Add(character);
         character.GetComponent<NPCController>().label.enabled = true;
-        Invoke("Number2", 15);
+        Invoke("Number2", 10);
     }
     private void Number2 ()
     {
@@ -280,7 +282,7 @@ public class PhaseManager : MonoBehaviour {
         narrator.text = "While the hunter sleeps, more prey appears, and begins grazing acorss the fields.";
         spawnedNPCs.Add(SpawnItem(spawner3, RedPrefab, null, SpawnText3, 7));
         spawnedNPCs[1].GetComponent<NPCController>().NewTarget(spawnedNPCs[0].GetComponent<NPCController>());
-        Invoke("Number5", 5);
+        Invoke("Number5", 10);
     }
 
     private void Number5()
@@ -288,35 +290,36 @@ public class PhaseManager : MonoBehaviour {
         narrator.text = "Seeing more prey, the hunter awakens and begins its chase again.";
         spawnedNPCs[0].GetComponent<NPCController>().NewTarget(spawnedNPCs[1].GetComponent<NPCController>());
         spawnedNPCs[0].GetComponent<NPCController>().mapState = 1;
-        Invoke("Number6", 5);
+        Invoke("Number6", 7);
     }
 
     private void Number6()
     {
         narrator.text = "This prey, however, has evolved, and is able to evade its attacker.";
-        Invoke("Number7", 5);
-        //spawnedNPCs[1].GetComponent<NPCController>().mapState = 0; // this should the evade algorithm
+        Invoke("Number7", 7);
+        spawnedNPCs[0].GetComponent<NPCController>().mapState = 4; // this should the evade algorithm
     }
 
     private void Number7()
     {
         narrator.text = "Seeing this, the hunter adjusts its tactics, hoping to catch the prey by surprise.";
-        //Invoke("Number8", 5);
-        //spawnedNPCs[1].GetComponent<NPCController>().mapState = 0; // this should the pursue arrive algorithm
+        Invoke("Number8", 5);
+        spawnedNPCs[1].GetComponent<NPCController>().mapState = 3; // this should the pursue arrive algorithm
     }
 
     private void Number8()
     {
         // ALIGN
-        //narrator.text = "Seeing this, the hunter adjusts its tactics, hoping to catch the prey bu surprise.";
-        //spawnedNPCs[1].GetComponent<NPCController>().mapState = 0; // this should the pursue arrive algorithm
+        narrator.text = "While the prey cowers in fear, the hunter aligns himself to hunt down the prey";
+        spawnedNPCs[0].GetComponent<NPCController>().mapState = 5;
     }
 
     private void Number9()
     {
         // FACE
-        //narrator.text = "Seeing this, the hunter adjusts its tactics, hoping to catch the prey bu surprise.";
-        //spawnedNPCs[1].GetComponent<NPCController>().mapState = 0; // this should the pursue arrive algorithm
+        narrator.text = "Finally, the prey has had enough, and decides to hunt the hunter, facing it head on.";
+        spawnedNPCs[1].GetComponent<NPCController>().mapState = 6;
+        spawnedNPCs[0].GetComponent<NPCController>().mapState = 4;
     }
 
     // Here is an example of a method you might want for when an arrival actually happens.

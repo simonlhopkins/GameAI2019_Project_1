@@ -57,7 +57,7 @@ public class SteeringBehavior : MonoBehaviour {
         target = newTarget;
     }
 
-    public float Face(float currentOrientation, Vector3 velocity)
+    public float Orient(float currentOrientation, Vector3 velocity)
     {
 
         //Debug.DrawRay(transform.position, velocity*5f, Color.red);

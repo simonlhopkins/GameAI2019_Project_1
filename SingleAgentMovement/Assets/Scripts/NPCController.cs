@@ -188,10 +188,10 @@ public class NPCController : MonoBehaviour {
 
 
         rb.AddForce(_linear * _angular * time, ForceMode.VelocityChange);
-        if(rb.velocity.magnitude> maxSpeed)
-        {
-            rb.velocity = Vector3.Normalize(rb.velocity) * maxSpeed;
-        }
+        //if(rb.velocity.magnitude> maxSpeed)
+        //{
+        //    rb.velocity = Vector3.Normalize(rb.velocity) * maxSpeed;
+        //}
         //
         Debug.DrawRay(position, _linear, Color.magenta);
         velocity = rb.velocity;

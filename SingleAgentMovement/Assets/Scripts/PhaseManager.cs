@@ -26,6 +26,7 @@ public class PhaseManager : MonoBehaviour {
     // public GameObject BluePrefab;    // reserved for future use
 
     public NPCController house;         // THis goes away
+    bool autoPlay;
 
     // Set up to use spawn points. Can add more here, and also add them to the 
     // Unity project. This won't be a good idea later on when you want to spawn
@@ -58,6 +59,7 @@ public class PhaseManager : MonoBehaviour {
     void Start() {
         spawnedNPCs = new List<GameObject>();
         Number0();
+        autoPlay = true;
     }
 
     /// <summary>
@@ -69,6 +71,10 @@ public class PhaseManager : MonoBehaviour {
 
         string inputstring = Input.inputString;
         int num;
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            autoPlay = true;
+        }
 
         // Look for a number key click
         if (inputstring.Length > 0)
@@ -92,38 +98,58 @@ public class PhaseManager : MonoBehaviour {
        // If we get here, we've been given a new map state, from either source
        switch (currentMapState) {
            case 0:
-               EnterMapStateZero();
+                autoPlay = false;
+                EnterMapStateZero();
+                previousMapState = currentMapState;
                break;
 
            case 1:
-               EnterMapStateOne();
-               break;
+                autoPlay = false;
+                EnterMapStateOne();
+                previousMapState = currentMapState;
+                break;
 
            case 2:
-               EnterMapStateTwo();
-               break;
+                autoPlay = false;
+                EnterMapStateTwo();
+                previousMapState = currentMapState;
+                break;
 
            case 3:
-               EnterMapStateThree();
-               break;
+                autoPlay = false;
+                EnterMapStateThree();
+                previousMapState = currentMapState;
+                break;
            case 4:
-               EnterMapStateFour();
-               break;
+                autoPlay = false;
+                EnterMapStateFour();
+                previousMapState = currentMapState;
+                break;
            case 5:
-               EnterMapStateFive();
-               break;
+                autoPlay = false;
+                EnterMapStateFive();
+                previousMapState = currentMapState;
+                break;
            case 6:
-               EnterMapStateSix();
-               break;
+                autoPlay = false;
+                EnterMapStateSix();
+                previousMapState = currentMapState;
+                break;
            case 7:
-               EnterMapStateSeven();
-               break;
+                autoPlay = false;
+                EnterMapStateSeven();
+                previousMapState = currentMapState;
+                break;
            case 8:
-               EnterMapStateEight();
-               break;
+                autoPlay = false;
+                EnterMapStateEight();
+                previousMapState = currentMapState;
+                break;
            case 9:
-               EnterMapStateNine();
-               break;
+                autoPlay = false;
+                EnterMapStateNine();
+                previousMapState = currentMapState;
+                break;
         }
     }
 
@@ -141,11 +167,25 @@ public class PhaseManager : MonoBehaviour {
 
     private void EnterMapStateZero()
     {
-        Refresh();
+        for (int i = spawnedNPCs.Count - 1; i >= 0; i--)
+        {
+            GameObject character = spawnedNPCs[i];
+            character.GetComponent<NPCController>().label.enabled = false;
+            character.SetActive(false);
+            Debug.Log("Deleted");
+        }
+        spawnedNPCs.Clear();
         Number0();
     }
     private void EnterMapStateOne() {
-        Refresh();
+        for (int i = spawnedNPCs.Count - 1; i >= 0; i--)
+        {
+            GameObject character1 = spawnedNPCs[i];
+            character1.GetComponent<NPCController>().label.enabled = false;
+            character1.SetActive(false);
+            Debug.Log("Deleted");
+        }
+        spawnedNPCs.Clear();
         GameObject character = SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 0);
         spawnedNPCs.Add(character);
         character.GetComponent<NPCController>().label.enabled = true;
@@ -154,7 +194,14 @@ public class PhaseManager : MonoBehaviour {
     }
     private void EnterMapStateTwo()
     {
-        Refresh();
+        for (int i = spawnedNPCs.Count - 1; i >= 0; i--)
+        {
+            GameObject character1 = spawnedNPCs[i];
+            character1.GetComponent<NPCController>().label.enabled = false;
+            character1.SetActive(false);
+            Debug.Log("Deleted");
+        }
+        spawnedNPCs.Clear();
         GameObject character = SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 0);
         spawnedNPCs.Add(character);
         character.GetComponent<NPCController>().label.enabled = true;
@@ -165,43 +212,122 @@ public class PhaseManager : MonoBehaviour {
     }
     private void EnterMapStateThree()
     {
-        Refresh();
+        for (int i = spawnedNPCs.Count - 1; i >= 0; i--)
+        {
+            GameObject character1 = spawnedNPCs[i];
+            character1.GetComponent<NPCController>().label.enabled = false;
+            character1.SetActive(false);
+            Debug.Log("Deleted");
+        }
+        spawnedNPCs.Clear();
         GameObject character = SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 0);
-        spawnedNPCs.Add(character);
-        character.GetComponent<NPCController>().label.enabled = true;
-        character = SpawnItem(spawner2, WolfPrefab, null, SpawnText2, 0);
         spawnedNPCs.Add(character);
         character.GetComponent<NPCController>().label.enabled = true;
         Number3();
     }
     private void EnterMapStateFour()
     {
-        Refresh();
+        for (int i = spawnedNPCs.Count - 1; i >= 0; i--)
+        {
+            GameObject character1 = spawnedNPCs[i];
+            character1.GetComponent<NPCController>().label.enabled = false;
+            character1.SetActive(false);
+            Debug.Log("Deleted");
+        }
+        spawnedNPCs.Clear();
+        GameObject character = SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 0);
+        spawnedNPCs.Add(character);
+        character.GetComponent<NPCController>().label.enabled = true;
         Number4();
     }
     private void EnterMapStateFive()
     {
-        Refresh();
+        for (int i = spawnedNPCs.Count - 1; i >= 0; i--)
+        {
+            GameObject character1 = spawnedNPCs[i];
+            character1.GetComponent<NPCController>().label.enabled = false;
+            character1.SetActive(false);
+            Debug.Log("Deleted");
+        }
+        spawnedNPCs.Clear();
+        GameObject character = SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 0);
+        spawnedNPCs.Add(character);
+        character.GetComponent<NPCController>().label.enabled = true;
+        character = SpawnItem(spawner3, RedPrefab, null, SpawnText3, 7);
+        spawnedNPCs.Add(character);
+        character.GetComponent<NPCController>().label.enabled = true;
         Number5();
     }
     private void EnterMapStateSix()
     {
-        Refresh();
+        for (int i = spawnedNPCs.Count - 1; i >= 0; i--)
+        {
+            GameObject character1 = spawnedNPCs[i];
+            character1.GetComponent<NPCController>().label.enabled = false;
+            character1.SetActive(false);
+            Debug.Log("Deleted");
+        }
+        spawnedNPCs.Clear();
+        GameObject character = SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 1);
+        spawnedNPCs.Add(character);
+        character.GetComponent<NPCController>().label.enabled = true;
+        character = SpawnItem(spawner3, RedPrefab, null, SpawnText3, 0);
+        spawnedNPCs.Add(character);
+        character.GetComponent<NPCController>().label.enabled = true;
         Number6();
     }
     private void EnterMapStateSeven()
     {
-        Refresh();
+        for (int i = spawnedNPCs.Count - 1; i >= 0; i--)
+        {
+            GameObject character1 = spawnedNPCs[i];
+            character1.GetComponent<NPCController>().label.enabled = false;
+            character1.SetActive(false);
+            Debug.Log("Deleted");
+        }
+        spawnedNPCs.Clear();
+        GameObject character = SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 0);
+        spawnedNPCs.Add(character);
+        character.GetComponent<NPCController>().label.enabled = true;
+        character = SpawnItem(spawner3, RedPrefab, null, SpawnText3, 4);
+        spawnedNPCs.Add(character);
+        character.GetComponent<NPCController>().label.enabled = true;
         Number7();
     }
     private void EnterMapStateEight()
     {
-        Refresh();
+        for (int i = spawnedNPCs.Count - 1; i >= 0; i--)
+        {
+            GameObject character1 = spawnedNPCs[i];
+            character1.GetComponent<NPCController>().label.enabled = false;
+            character1.SetActive(false);
+            Debug.Log("Deleted");
+        }
+        spawnedNPCs.Clear();
+        GameObject character = SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 0);
+        spawnedNPCs.Add(character);
+        character.GetComponent<NPCController>().label.enabled = true;
+        character = SpawnItem(spawner3, RedPrefab, null, SpawnText3, 4);
+        spawnedNPCs.Add(character);
+        character.GetComponent<NPCController>().label.enabled = true;
         Number8();
     }
     private void EnterMapStateNine()
     {
-        Refresh();
+        for (int i = spawnedNPCs.Count - 1; i >= 0; i--)
+        {
+            GameObject character1 = spawnedNPCs[i];
+            character1.GetComponent<NPCController>().label.enabled = false;
+            character1.SetActive(false);
+            Debug.Log("Deleted");
+        }
+        spawnedNPCs.Clear();
+        GameObject character = SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 0);
+        spawnedNPCs.Add(character);
+        character.GetComponent<NPCController>().label.enabled = true;
+        character = SpawnItem(spawner3, RedPrefab, null, SpawnText3, 0);
+        spawnedNPCs.Add(character);
+        character.GetComponent<NPCController>().label.enabled = true;
         Number9();
     }
 
@@ -244,7 +370,11 @@ public class PhaseManager : MonoBehaviour {
         GameObject character = SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 0);
         spawnedNPCs.Add(character);
         character.GetComponent<NPCController>().label.enabled = true;
-        Invoke("Number1", 5);
+        if (autoPlay)
+        {
+            Invoke("Number1", 5);
+        }
+        
     }
 
     private void Number1()
@@ -253,7 +383,10 @@ public class PhaseManager : MonoBehaviour {
         GameObject character = SpawnItem(spawner2, WolfPrefab, null, SpawnText2, 7);
         spawnedNPCs.Add(character);
         character.GetComponent<NPCController>().label.enabled = true;
-        Invoke("Number2", 10);
+        if (autoPlay)
+        {
+            Invoke("Number2", 10);
+        }
     }
     private void Number2 ()
     {
@@ -265,19 +398,22 @@ public class PhaseManager : MonoBehaviour {
         spawnedNPCs[1].GetComponent<NPCController>().NewTarget(spawnedNPCs[0].GetComponent<NPCController>());
         //sets the map state of the wolf to flee from the hunter
         spawnedNPCs[1].GetComponent<NPCController>().mapState = 2;
-
-        Invoke("Number3", 40);
+        if (autoPlay)
+        {
+            Invoke("Number3", 40);
+        }
     }
     private void Number3()
     {
-
-
         narrator.text = "After its feast, the hunter dozes in the field, intent on waking up if more prey appears.";
         spawnedNPCs[0].GetComponent<NPCController>().mapState = 0;
         GameObject wolf = spawnedNPCs[1];
         spawnedNPCs.RemoveAt(1);
         wolf.SetActive(false);
-        Invoke("Number4", 5);
+        if (autoPlay)
+        {
+            Invoke("Number4", 5);
+        }
     }
 
     private void Number4()
@@ -285,7 +421,10 @@ public class PhaseManager : MonoBehaviour {
         narrator.text = "While the hunter sleeps, more prey appears, and begins grazing acorss the fields.";
         spawnedNPCs.Add(SpawnItem(spawner3, RedPrefab, null, SpawnText3, 7));
         spawnedNPCs[1].GetComponent<NPCController>().NewTarget(spawnedNPCs[0].GetComponent<NPCController>());
-        Invoke("Number5", 10);
+        if (autoPlay)
+        {
+            Invoke("Number5", 10);
+        }
     }
 
     private void Number5()
@@ -293,21 +432,30 @@ public class PhaseManager : MonoBehaviour {
         narrator.text = "Seeing more prey, the hunter awakens and begins its chase again.";
         spawnedNPCs[0].GetComponent<NPCController>().NewTarget(spawnedNPCs[1].GetComponent<NPCController>());
         spawnedNPCs[0].GetComponent<NPCController>().mapState = 1;
-        Invoke("Number6", 7);
+        if (autoPlay)
+        {
+            Invoke("Number6", 7);
+        }
     }
 
     private void Number6()
     {
         narrator.text = "This prey, however, has evolved, and is able to evade its attacker.";
-        Invoke("Number7", 7);
-        spawnedNPCs[0].GetComponent<NPCController>().mapState = 4; // this should the evade algorithm
+        spawnedNPCs[1].GetComponent<NPCController>().mapState = 4; // this should the evade algorithm
+        if (autoPlay)
+        {
+            Invoke("Number7", 7);
+        }
     }
 
     private void Number7()
     {
         narrator.text = "Seeing this, the hunter adjusts its tactics, hoping to catch the prey by surprise.";
-        Invoke("Number8", 5);
-        spawnedNPCs[1].GetComponent<NPCController>().mapState = 3; // this should the pursue arrive algorithm
+        spawnedNPCs[0].GetComponent<NPCController>().mapState = 3; // this should be the pursue arrive algorithm
+        if (autoPlay)
+        {
+            Invoke("Number8", 5);
+        }
     }
 
     private void Number8()
@@ -315,6 +463,10 @@ public class PhaseManager : MonoBehaviour {
         // ALIGN
         narrator.text = "While the prey cowers in fear, the hunter aligns himself to hunt down the prey";
         spawnedNPCs[0].GetComponent<NPCController>().mapState = 5;
+        if (autoPlay)
+        {
+            Invoke("Number9", 5);
+        }
     }
 
     private void Number9()
@@ -323,6 +475,10 @@ public class PhaseManager : MonoBehaviour {
         narrator.text = "Finally, the prey has had enough, and decides to hunt the hunter, facing it head on.";
         spawnedNPCs[1].GetComponent<NPCController>().mapState = 6;
         spawnedNPCs[0].GetComponent<NPCController>().mapState = 4;
+        if (autoPlay)
+        {
+            Invoke("EnterMapStateZero", 5);
+        }
     }
 
     // Here is an example of a method you might want for when an arrival actually happens.
@@ -331,11 +487,6 @@ public class PhaseManager : MonoBehaviour {
         character.GetComponent<NPCController>().mapState = 3; // Whatever the new map state is after arrival
         character.GetComponent<NPCController>().DrawConcentricCircle(character.GetComponent<SteeringBehavior>().slowRadiusL);
     }
-
-    // Following the above examples, write whatever methods you need that you can bolt together to 
-    // create more complex movement behaviors.
-
-        // YOUR CODE HERE
 
     // Vestigial. Maybe you'll find it useful.
     void OnDrawGizmosSelected() {

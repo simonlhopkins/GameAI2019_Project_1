@@ -47,7 +47,7 @@ public class SteeringBehavior : MonoBehaviour {
         agent = GetComponent<NPCController>();
 
         //test for debug
-        slowRadiusL = 7f;
+        slowRadiusL = 10f;
         timeToTarget = 3f;
         //wanderOrientation = agent.orientation;
     }
@@ -77,13 +77,13 @@ public class SteeringBehavior : MonoBehaviour {
     public SteeringData Seek()
     {
 
-        float acceleration = 1f;
+        float acceleration = 0.5f;
         Vector3 currentVel = agent.velocity;
         Vector3 desiredVel = Vector3.Normalize(target.position - agent.position) * maxSpeed;
         
         Vector3 steeringVel = desiredVel - currentVel;
         Vector3 returnVelocity = (currentVel + steeringVel).normalized * maxSpeed;
-        agent.rotation = Mathf.Atan2(-returnVelocity.x, returnVelocity.z) * Mathf.Rad2Deg;
+        agent.rotation = align(target);
 
         gameObject.GetComponent<NPCController>().DrawLine(agent.transform.position, target.position);
         //Debug.Log(target.position);
@@ -94,14 +94,13 @@ public class SteeringBehavior : MonoBehaviour {
 
     public SteeringData Flee()
     {
-        Debug.Log("flee");
-        float acceleration = 1f;
+        float acceleration = 0.5f;
         Vector3 currentVel = agent.velocity;
         Vector3 desiredVel = Vector3.Normalize(target.position - agent.position) * maxSpeed;
 
         Vector3 steeringVel = desiredVel - currentVel;
         Vector3 returnVelocity = (currentVel + steeringVel).normalized * maxSpeed;
-        agent.rotation = Mathf.Atan2(-returnVelocity.x, returnVelocity.z) * Mathf.Rad2Deg;
+        agent.rotation = 180 + face();
 
         gameObject.GetComponent<NPCController>().DrawLine(agent.transform.position, target.position);
 
@@ -115,25 +114,29 @@ public class SteeringBehavior : MonoBehaviour {
         //anicipate 3 frames ahead
         //refactor with global vars
 
-        
-        //Vector3 anticipatedTargetPos = target.position + (target.velocity * 10f);
-        Vector3 desiredVel = target.position - agent.position;
+        float acceleration = 0.5f;
+        Vector3 anticipatedTargetPos = target.position + (target.velocity * 1f);
+        Vector3 desiredVel = anticipatedTargetPos - agent.position;
         // Should draw the circle around the target where we slow down
         gameObject.GetComponent<NPCController>().DrawCircle(target.position, slowRadiusL);
         float distanceToTarget = (desiredVel).magnitude;
 
-        if (distanceToTarget < 0.1) {
-            return new SteeringData(Vector3.zero, 0);
-        }
+
 
         //Debug.Log(distanceToTarget);
         Vector3 currentVel = agent.velocity;
 
         if (distanceToTarget < slowRadiusL){
             // Inside the slowing area
-
+            Debug.Log("INSIDE RADIUS");
             desiredVel = Vector3.Normalize(desiredVel) * maxSpeed * (distanceToTarget / slowRadiusL);
 
+
+            acceleration = -0.2f;
+            if (currentVel.magnitude < 0.1)
+            {
+                return new SteeringData(Vector3.zero, 0);
+            }
         }
         else{
             // Outside the slowing area.
@@ -150,9 +153,9 @@ public class SteeringBehavior : MonoBehaviour {
         Vector3 returnVelocity = currentVel + steeringVel;
 
 
-        agent.rotation = Mathf.Atan2(-returnVelocity.x, returnVelocity.z) * Mathf.Rad2Deg;
+        agent.rotation = face();
         //could return an object
-        return new SteeringData(returnVelocity, 0.1f); ;
+        return new SteeringData(returnVelocity, acceleration); ;
     }
     /*
     public Vector3 Evade()
@@ -204,10 +207,21 @@ public class SteeringBehavior : MonoBehaviour {
         return new SteeringData(velocity, acceleration);
     }
 
-    //public Vector3 evade() {
+    public float face() {
 
-    //    return -PursueArrive();
-    //}
+
+        Vector3 direction = target.position - agent.position;
+
+
+        return Mathf.Atan2(-direction.x, direction.z) * Mathf.Rad2Deg;
+    }
+
+    public float align(NPCController target) {
+
+        return target.rotation;
+    }
+
+
 
 }
 

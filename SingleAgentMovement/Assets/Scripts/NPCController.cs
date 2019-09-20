@@ -130,6 +130,11 @@ public class NPCController : MonoBehaviour {
                 stopped = false;
                 // linear = ai.whatever();  -- replace with the desired calls
                 // angular = ai.whatever();
+
+                linear = ai.Seek().velocity;
+                angular = ai.Seek().acceleration;
+                rotation = ai.align(target);
+
                 break;
             case 6:
                 if (label)
@@ -139,6 +144,10 @@ public class NPCController : MonoBehaviour {
                 stopped = false;
                 // linear = ai.whatever();  -- replace with the desired calls
                 // angular = ai.whatever();
+                linear = ai.Seek().velocity;
+                angular = ai.Seek().acceleration;
+                rotation = ai.face();
+
                 break;
             case 7:
                 if (label)

@@ -177,6 +177,7 @@ public class SteeringBehavior : MonoBehaviour {
         return new SteeringData(returnVelocity, acceleration); ;
     }
 
+
     public SteeringData Wander(Vector3 current)
     {
 
@@ -214,6 +215,7 @@ public class SteeringBehavior : MonoBehaviour {
     }
 
     public float face() {
+
 
 
         Vector3 direction = target.position - agent.position;

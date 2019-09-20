@@ -128,12 +128,13 @@ public class SteeringBehavior : MonoBehaviour {
 
         if (distanceToTarget < slowRadiusL){
             // Inside the slowing area
-            Debug.Log("INSIDE RADIUS");
+            Debug.Log("INSIDE RADIUS: "+ (agent.velocity - desiredVel)/Time.deltaTime);
             desiredVel = Vector3.Normalize(desiredVel) * maxSpeed * (distanceToTarget / slowRadiusL);
-
+            //(distanceToTarget / slowRadiusL) percent of the way you are there
+            //
 
             acceleration = -0.2f;
-            if (currentVel.magnitude < 0.1)
+            if (currentVel.magnitude < 0.1f)
             {
                 return new SteeringData(Vector3.zero, 0);
             }

@@ -131,6 +131,7 @@ public class NPCController : MonoBehaviour {
                     label.text = name.Replace("(Clone)", "") + "\nAlgorithm: Dynamic Align";
                 }
                 stopped = false;
+                ai.SetTarget(target);
                 // linear = ai.whatever();  -- replace with the desired calls
                 // angular = ai.whatever();
 
@@ -145,6 +146,7 @@ public class NPCController : MonoBehaviour {
                     label.text = name.Replace("(Clone)", "") + "\nAlgorithm: Dynamic Face";
                 }
                 stopped = false;
+                ai.SetTarget(target);
                 // linear = ai.whatever();  -- replace with the desired calls
                 // angular = ai.whatever();
                 linear = ai.Seek().velocity;

@@ -3,7 +3,7 @@ Simon Hopkins: Worked on Pursue with Approach, Evade, Align, and Face
 
 How Phases Work:
 
-When the game begins, the different phases/scenes will play out based on a timer; to start this process, simply press space. Pressing a number will allow the scenes to play out in order on a timer. If, however, you wish to view a specific scene, you may press a number from 0 - 9. This will take you directly to the desired scene; however, it will also turn off autoplay. If you wish to turn autoplay back on, you must switch scenes and press space.
+When the game begins, the different phases/scenes will play out based on a timer; to start this process, simply press space. Pressing a number will allow the scenes to play out in order on a timer. If, however, you wish to view a specific scene, you may press a number from 0 - 9. This will take you directly to the desired scene; however, it will also turn off autoplay. If you wish to turn autoplay back on, you may press space, and the game will go back to scene 1 and autoplay from there (Scene 0 can only be visited by pressing 0, and only serves as a starting point, not a real demonstration of the AI).
 
 Scenes (in order):
 

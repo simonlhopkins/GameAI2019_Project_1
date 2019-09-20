@@ -314,6 +314,7 @@ public class PhaseManager : MonoBehaviour {
         character = SpawnItem(spawner3, RedPrefab, null, SpawnText3, 0);
         spawnedNPCs.Add(character);
         character.GetComponent<NPCController>().label.enabled = true;
+        spawnedNPCs[0].GetComponent<SteeringBehavior>().target = spawnedNPCs[1].GetComponent<NPCController>();
         spawnedNPCs[0].GetComponent<NPCController>().NewTarget(spawnedNPCs[1].GetComponent<NPCController>());
         spawnedNPCs[1].GetComponent<NPCController>().NewTarget(spawnedNPCs[0].GetComponent<NPCController>());
         spawnedNPCs[1].GetComponent<NPCController>().mapState = 4;
@@ -335,6 +336,7 @@ public class PhaseManager : MonoBehaviour {
         character = SpawnItem(spawner3, RedPrefab, null, SpawnText3, 0);
         spawnedNPCs.Add(character);
         character.GetComponent<NPCController>().label.enabled = true;
+        spawnedNPCs[0].GetComponent<SteeringBehavior>().target = spawnedNPCs[1].GetComponent<NPCController>();
         spawnedNPCs[0].GetComponent<NPCController>().NewTarget(spawnedNPCs[1].GetComponent<NPCController>());
         spawnedNPCs[1].GetComponent<NPCController>().NewTarget(spawnedNPCs[0].GetComponent<NPCController>());
         Number9();
@@ -444,7 +446,7 @@ public class PhaseManager : MonoBehaviour {
         spawnedNPCs[0].GetComponent<NPCController>().mapState = 1;
         if (autoPlay)
         {
-            Invoke("Number6", 5);
+            Invoke("Number6", 3);
         }
     }
 
@@ -464,7 +466,7 @@ public class PhaseManager : MonoBehaviour {
         spawnedNPCs[0].GetComponent<NPCController>().mapState = 3; // this should be the pursue arrive algorithm
         if (autoPlay)
         {
-            Invoke("Number8", 5);
+            Invoke("Number8", 7);
         }
     }
 
@@ -475,7 +477,7 @@ public class PhaseManager : MonoBehaviour {
         spawnedNPCs[0].GetComponent<NPCController>().mapState = 5;
         if (autoPlay)
         {
-            Invoke("Number9", 5);
+            Invoke("Number9", 7);
         }
     }
 
@@ -487,7 +489,7 @@ public class PhaseManager : MonoBehaviour {
         spawnedNPCs[0].GetComponent<NPCController>().mapState = 4;
         if (autoPlay)
         {
-            Invoke("EnterMapStateZero", 5);
+            Invoke("EnterMapStateZero", 2);
         }
     }
 

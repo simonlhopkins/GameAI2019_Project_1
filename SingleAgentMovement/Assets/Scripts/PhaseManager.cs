@@ -152,7 +152,7 @@ public class PhaseManager : MonoBehaviour {
         {
             GameObject character = spawnedNPCs[i];
             character.GetComponent<NPCController>().label.enabled = false;
-            Destroy(character);
+            character.SetActive(false);
             Debug.Log("Deleted");
         }
         spawnedNPCs.Clear();
@@ -164,7 +164,7 @@ public class PhaseManager : MonoBehaviour {
         {
             GameObject character = spawnedNPCs[i];
             character.GetComponent<NPCController>().label.enabled = false;
-            Destroy(character);
+            character.SetActive(false);
             Debug.Log("Deleted");
         }
         spawnedNPCs.Clear();
@@ -175,7 +175,7 @@ public class PhaseManager : MonoBehaviour {
         {
             GameObject character1 = spawnedNPCs[i];
             character1.GetComponent<NPCController>().label.enabled = false;
-            Destroy(character1);
+            character1.SetActive(false);
             Debug.Log("Deleted");
         }
         spawnedNPCs.Clear();
@@ -191,7 +191,7 @@ public class PhaseManager : MonoBehaviour {
         {
             GameObject character1 = spawnedNPCs[i];
             character1.GetComponent<NPCController>().label.enabled = false;
-            Destroy(character1);
+            character1.SetActive(false);
             Debug.Log("Deleted");
         }
         spawnedNPCs.Clear();
@@ -209,7 +209,7 @@ public class PhaseManager : MonoBehaviour {
         {
             GameObject character1 = spawnedNPCs[i];
             character1.GetComponent<NPCController>().label.enabled = false;
-            Destroy(character1);
+            character1.SetActive(false);
             Debug.Log("Deleted");
         }
         spawnedNPCs.Clear();
@@ -227,7 +227,7 @@ public class PhaseManager : MonoBehaviour {
         {
             GameObject character1 = spawnedNPCs[i];
             character1.GetComponent<NPCController>().label.enabled = false;
-            Destroy(character1);
+            character1.SetActive(false);
             Debug.Log("Deleted");
         }
         spawnedNPCs.Clear();
@@ -242,7 +242,7 @@ public class PhaseManager : MonoBehaviour {
         {
             GameObject character1 = spawnedNPCs[i];
             character1.GetComponent<NPCController>().label.enabled = false;
-            Destroy(character1);
+            character1.SetActive(false);
             Debug.Log("Deleted");
         }
         spawnedNPCs.Clear();
@@ -262,7 +262,7 @@ public class PhaseManager : MonoBehaviour {
         {
             GameObject character1 = spawnedNPCs[i];
             character1.GetComponent<NPCController>().label.enabled = false;
-            Destroy(character1);
+            character1.SetActive(false);
             Debug.Log("Deleted");
         }
         spawnedNPCs.Clear();
@@ -283,7 +283,7 @@ public class PhaseManager : MonoBehaviour {
         {
             GameObject character1 = spawnedNPCs[i];
             character1.GetComponent<NPCController>().label.enabled = false;
-            Destroy(character1);
+            character1.SetActive(false);
             Debug.Log("Deleted");
         }
         spawnedNPCs.Clear();
@@ -304,14 +304,14 @@ public class PhaseManager : MonoBehaviour {
         {
             GameObject character1 = spawnedNPCs[i];
             character1.GetComponent<NPCController>().label.enabled = false;
-            Destroy(character1);
+            character1.SetActive(false);
             Debug.Log("Deleted");
         }
         spawnedNPCs.Clear();
         GameObject character = SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 0);
         spawnedNPCs.Add(character);
         character.GetComponent<NPCController>().label.enabled = true;
-        character = SpawnItem(spawner3, RedPrefab, null, SpawnText3, 4);
+        character = SpawnItem(spawner3, RedPrefab, null, SpawnText3, 0);
         spawnedNPCs.Add(character);
         character.GetComponent<NPCController>().label.enabled = true;
         spawnedNPCs[0].GetComponent<NPCController>().NewTarget(spawnedNPCs[1].GetComponent<NPCController>());
@@ -325,7 +325,7 @@ public class PhaseManager : MonoBehaviour {
         {
             GameObject character1 = spawnedNPCs[i];
             character1.GetComponent<NPCController>().label.enabled = false;
-            Destroy(character1);
+            character1.SetActive(false);
             Debug.Log("Deleted");
         }
         spawnedNPCs.Clear();
@@ -402,24 +402,24 @@ public class PhaseManager : MonoBehaviour {
         narrator.text = "The hunter begins chasing its prey. The prey flees, but is ultimately trapped by the hunter.";
         spawnedNPCs[0].GetComponent<NPCController>().NewTarget(spawnedNPCs[1].GetComponent<NPCController>());
         //sets the map state of the hunter to 1, which is seeking the target
-        spawnedNPCs[0].GetComponent<NPCController>().mapState = 3;
+        spawnedNPCs[0].GetComponent<NPCController>().mapState = 1;
         //sets the target of the wolf to the hunter
         spawnedNPCs[1].GetComponent<NPCController>().NewTarget(spawnedNPCs[0].GetComponent<NPCController>());
         //sets the map state of the wolf to flee from the hunter
         spawnedNPCs[1].GetComponent<NPCController>().mapState = 2;
         if (autoPlay)
         {
-            Invoke("Number3", 5);
+            Invoke("Number3", 7);
         }
     }
     private void Number3()
     {
         narrator.text = "After its feast, the hunter dozes in the field, intent on waking up if more prey appears.";
         spawnedNPCs[0].GetComponent<NPCController>().mapState = 0;
-        GameObject wolf = spawnedNPCs[1];
+        GameObject wolf = spawnedNPCs[1].gameObject;
         spawnedNPCs.RemoveAt(1);
         wolf.GetComponent<NPCController>().label.enabled = false;
-        Destroy(wolf);
+        wolf.SetActive(false);
         if (autoPlay)
         {
             Invoke("Number4", 5);
@@ -433,7 +433,7 @@ public class PhaseManager : MonoBehaviour {
         spawnedNPCs[1].GetComponent<NPCController>().NewTarget(spawnedNPCs[0].GetComponent<NPCController>());
         if (autoPlay)
         {
-            Invoke("Number5", 5);
+            Invoke("Number5", 3);
         }
     }
 

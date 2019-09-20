@@ -101,7 +101,6 @@ public class SteeringBehavior : MonoBehaviour {
         //Vector3 anticipatedTargetPos = target.position + (target.velocity * 1f);
 
         // Should draw the circle around the target where we slow down
-        gameObject.GetComponent<NPCController>().DrawCircle(target.position, slowRadiusL);
         float distanceToTarget = (target.position- agent.position).magnitude;
         float prediction;
         if (agent.velocity.magnitude <= distanceToTarget / maxPrediction)
@@ -114,11 +113,13 @@ public class SteeringBehavior : MonoBehaviour {
 
         Vector3 targetPos = target.position;
         targetPos += target.velocity * prediction;
+        gameObject.GetComponent<NPCController>().DrawCircle(targetPos, targetRadiusL);
         Vector3 desiredVel = targetPos - agent.position;
         //Debug.Log(distanceToTarget);
         Vector3 currentVel = agent.velocity;
 
         if (distanceToTarget < slowRadiusL){
+            gameObject.GetComponent<NPCController>().DrawCircle(target.position, slowRadiusL);
             // Inside the slowing area
             Debug.Log("INSIDE RADIUS: "+ (agent.velocity - desiredVel)/Time.deltaTime);
             float targetSpeed = maxSpeed * (distanceToTarget / slowRadiusL);
@@ -143,7 +144,6 @@ public class SteeringBehavior : MonoBehaviour {
         // Set the steering based on this
         //steering
         Vector3 steeringVel = desiredVel - currentVel;
-        gameObject.GetComponent<NPCController>().DrawCircle(steeringVel, targetRadiusL);
 
         returnVelocity = currentVel + steeringVel;
 
@@ -177,6 +177,7 @@ public class SteeringBehavior : MonoBehaviour {
 
         Vector3 targetPos = target.position;
         targetPos += target.velocity * prediction;
+        gameObject.GetComponent<NPCController>().DrawCircle(targetPos, targetRadiusL);
         Vector3 desiredVel = targetPos - agent.position;
         //Debug.Log(distanceToTarget);
         Vector3 currentVel = agent.velocity;
@@ -184,7 +185,6 @@ public class SteeringBehavior : MonoBehaviour {
         // Set the steering based on this
         //steering
         Vector3 steeringVel = desiredVel - currentVel;
-        gameObject.GetComponent<NPCController>().DrawCircle(steeringVel, targetRadiusL);
         returnVelocity = currentVel + steeringVel;
         agent.rotation = 180+face();
         //could return an object

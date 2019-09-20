@@ -120,8 +120,11 @@ public class NPCController : MonoBehaviour {
                     label.text = name.Replace("(Clone)", "") + "\nAlgorithm: Dynamic Evade";
                 }
                 stopped = false;
-                // linear = ai.whatever();  -- replace with the desired calls
-                // angular = ai.whatever();
+                ai.SetTarget(target);
+                //velocity = ai.PursueArrive();
+
+                linear = ai.Evade().velocity;
+                angular = ai.Evade().acceleration;
                 break;
             case 5:
                 if (label) {

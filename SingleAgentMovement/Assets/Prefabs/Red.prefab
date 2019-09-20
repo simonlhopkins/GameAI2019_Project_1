@@ -148,7 +148,7 @@ MonoBehaviour:
   target: {fileID: 0}
   maxPrediction: 1
   maxAcceleration: 3
-  maxSpeed: 3
+  maxSpeed: 8
   targetRadiusL: 2
   slowRadiusL: 3
   timeToTarget: 0.1

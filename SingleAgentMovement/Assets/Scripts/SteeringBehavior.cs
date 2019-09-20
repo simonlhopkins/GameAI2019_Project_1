@@ -86,8 +86,8 @@ public class SteeringBehavior : MonoBehaviour {
         agent.rotation = align(target);
 
         gameObject.GetComponent<NPCController>().DrawLine(agent.transform.position, target.position);
-        Debug.Log(target.position);
-
+        //Debug.Log(target.position);
+        Debug.DrawRay(agent.position, returnVelocity, Color.magenta);
         return new SteeringData(returnVelocity, acceleration);
     }
 
@@ -123,7 +123,7 @@ public class SteeringBehavior : MonoBehaviour {
 
 
 
-        Debug.Log(distanceToTarget);
+        //Debug.Log(distanceToTarget);
         Vector3 currentVel = agent.velocity;
 
         if (distanceToTarget < slowRadiusL){

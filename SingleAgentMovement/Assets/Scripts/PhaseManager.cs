@@ -87,6 +87,7 @@ public class PhaseManager : MonoBehaviour {
                 {
                     previousMapState = currentMapState;
                     currentMapState = num;
+                    //autoPlay = false;
                 }
             }
         }
@@ -98,55 +99,45 @@ public class PhaseManager : MonoBehaviour {
        // If we get here, we've been given a new map state, from either source
        switch (currentMapState) {
            case 0:
-                autoPlay = false;
                 EnterMapStateZero();
                 previousMapState = currentMapState;
                break;
 
            case 1:
-                autoPlay = false;
                 EnterMapStateOne();
                 previousMapState = currentMapState;
                 break;
 
            case 2:
-                autoPlay = false;
                 EnterMapStateTwo();
                 previousMapState = currentMapState;
                 break;
 
            case 3:
-                autoPlay = false;
                 EnterMapStateThree();
                 previousMapState = currentMapState;
                 break;
            case 4:
-                autoPlay = false;
                 EnterMapStateFour();
                 previousMapState = currentMapState;
                 break;
            case 5:
-                autoPlay = false;
                 EnterMapStateFive();
                 previousMapState = currentMapState;
                 break;
            case 6:
-                autoPlay = false;
                 EnterMapStateSix();
                 previousMapState = currentMapState;
                 break;
            case 7:
-                autoPlay = false;
                 EnterMapStateSeven();
                 previousMapState = currentMapState;
                 break;
            case 8:
-                autoPlay = false;
                 EnterMapStateEight();
                 previousMapState = currentMapState;
                 break;
            case 9:
-                autoPlay = false;
                 EnterMapStateNine();
                 previousMapState = currentMapState;
                 break;
@@ -253,9 +244,11 @@ public class PhaseManager : MonoBehaviour {
         GameObject character = SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 0);
         spawnedNPCs.Add(character);
         character.GetComponent<NPCController>().label.enabled = true;
-        character = SpawnItem(spawner3, RedPrefab, null, SpawnText3, 7);
+        character = SpawnItem(spawner3, RedPrefab, null, SpawnText3, 0);
         spawnedNPCs.Add(character);
         character.GetComponent<NPCController>().label.enabled = true;
+        spawnedNPCs[1].GetComponent<NPCController>().NewTarget(spawnedNPCs[0].GetComponent<NPCController>());
+        spawnedNPCs[1].GetComponent<NPCController>().mapState = 7;
         Number5();
     }
     private void EnterMapStateSix()
@@ -268,12 +261,15 @@ public class PhaseManager : MonoBehaviour {
             Debug.Log("Deleted");
         }
         spawnedNPCs.Clear();
-        GameObject character = SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 1);
+        GameObject character = SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 0);
         spawnedNPCs.Add(character);
         character.GetComponent<NPCController>().label.enabled = true;
         character = SpawnItem(spawner3, RedPrefab, null, SpawnText3, 0);
         spawnedNPCs.Add(character);
         character.GetComponent<NPCController>().label.enabled = true;
+        spawnedNPCs[0].GetComponent<NPCController>().NewTarget(spawnedNPCs[1].GetComponent<NPCController>());
+        spawnedNPCs[0].GetComponent<NPCController>().mapState = 1;
+        spawnedNPCs[1].GetComponent<NPCController>().NewTarget(spawnedNPCs[0].GetComponent<NPCController>());
         Number6();
     }
     private void EnterMapStateSeven()
@@ -289,9 +285,12 @@ public class PhaseManager : MonoBehaviour {
         GameObject character = SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 0);
         spawnedNPCs.Add(character);
         character.GetComponent<NPCController>().label.enabled = true;
-        character = SpawnItem(spawner3, RedPrefab, null, SpawnText3, 4);
+        character = SpawnItem(spawner3, RedPrefab, null, SpawnText3, 0);
         spawnedNPCs.Add(character);
         character.GetComponent<NPCController>().label.enabled = true;
+        spawnedNPCs[0].GetComponent<NPCController>().NewTarget(spawnedNPCs[1].GetComponent<NPCController>());
+        spawnedNPCs[1].GetComponent<NPCController>().NewTarget(spawnedNPCs[0].GetComponent<NPCController>());
+        spawnedNPCs[1].GetComponent<NPCController>().mapState = 4;
         Number7();
     }
     private void EnterMapStateEight()
@@ -310,6 +309,9 @@ public class PhaseManager : MonoBehaviour {
         character = SpawnItem(spawner3, RedPrefab, null, SpawnText3, 4);
         spawnedNPCs.Add(character);
         character.GetComponent<NPCController>().label.enabled = true;
+        spawnedNPCs[0].GetComponent<NPCController>().NewTarget(spawnedNPCs[1].GetComponent<NPCController>());
+        spawnedNPCs[1].GetComponent<NPCController>().NewTarget(spawnedNPCs[0].GetComponent<NPCController>());
+        spawnedNPCs[1].GetComponent<NPCController>().mapState = 4;
         Number8();
     }
     private void EnterMapStateNine()
@@ -328,6 +330,8 @@ public class PhaseManager : MonoBehaviour {
         character = SpawnItem(spawner3, RedPrefab, null, SpawnText3, 0);
         spawnedNPCs.Add(character);
         character.GetComponent<NPCController>().label.enabled = true;
+        spawnedNPCs[0].GetComponent<NPCController>().NewTarget(spawnedNPCs[1].GetComponent<NPCController>());
+        spawnedNPCs[1].GetComponent<NPCController>().NewTarget(spawnedNPCs[0].GetComponent<NPCController>());
         Number9();
     }
 
@@ -400,7 +404,7 @@ public class PhaseManager : MonoBehaviour {
         spawnedNPCs[1].GetComponent<NPCController>().mapState = 2;
         if (autoPlay)
         {
-            Invoke("Number3", 40);
+            Invoke("Number3", 10);
         }
     }
     private void Number3()

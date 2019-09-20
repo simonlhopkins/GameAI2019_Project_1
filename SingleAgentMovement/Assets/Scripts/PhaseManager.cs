@@ -152,7 +152,7 @@ public class PhaseManager : MonoBehaviour {
         {
             GameObject character = spawnedNPCs[i];
             character.GetComponent<NPCController>().label.enabled = false;
-            character.SetActive(false);
+            Destroy(character);
             Debug.Log("Deleted");
         }
         spawnedNPCs.Clear();
@@ -164,7 +164,7 @@ public class PhaseManager : MonoBehaviour {
         {
             GameObject character = spawnedNPCs[i];
             character.GetComponent<NPCController>().label.enabled = false;
-            character.SetActive(false);
+            Destroy(character);
             Debug.Log("Deleted");
         }
         spawnedNPCs.Clear();
@@ -175,7 +175,7 @@ public class PhaseManager : MonoBehaviour {
         {
             GameObject character1 = spawnedNPCs[i];
             character1.GetComponent<NPCController>().label.enabled = false;
-            character1.SetActive(false);
+            Destroy(character1);
             Debug.Log("Deleted");
         }
         spawnedNPCs.Clear();
@@ -191,7 +191,7 @@ public class PhaseManager : MonoBehaviour {
         {
             GameObject character1 = spawnedNPCs[i];
             character1.GetComponent<NPCController>().label.enabled = false;
-            character1.SetActive(false);
+            Destroy(character1);
             Debug.Log("Deleted");
         }
         spawnedNPCs.Clear();
@@ -209,7 +209,7 @@ public class PhaseManager : MonoBehaviour {
         {
             GameObject character1 = spawnedNPCs[i];
             character1.GetComponent<NPCController>().label.enabled = false;
-            character1.SetActive(false);
+            Destroy(character1);
             Debug.Log("Deleted");
         }
         spawnedNPCs.Clear();
@@ -227,7 +227,7 @@ public class PhaseManager : MonoBehaviour {
         {
             GameObject character1 = spawnedNPCs[i];
             character1.GetComponent<NPCController>().label.enabled = false;
-            character1.SetActive(false);
+            Destroy(character1);
             Debug.Log("Deleted");
         }
         spawnedNPCs.Clear();
@@ -242,7 +242,7 @@ public class PhaseManager : MonoBehaviour {
         {
             GameObject character1 = spawnedNPCs[i];
             character1.GetComponent<NPCController>().label.enabled = false;
-            character1.SetActive(false);
+            Destroy(character1);
             Debug.Log("Deleted");
         }
         spawnedNPCs.Clear();
@@ -262,7 +262,7 @@ public class PhaseManager : MonoBehaviour {
         {
             GameObject character1 = spawnedNPCs[i];
             character1.GetComponent<NPCController>().label.enabled = false;
-            character1.SetActive(false);
+            Destroy(character1);
             Debug.Log("Deleted");
         }
         spawnedNPCs.Clear();
@@ -283,7 +283,7 @@ public class PhaseManager : MonoBehaviour {
         {
             GameObject character1 = spawnedNPCs[i];
             character1.GetComponent<NPCController>().label.enabled = false;
-            character1.SetActive(false);
+            Destroy(character1);
             Debug.Log("Deleted");
         }
         spawnedNPCs.Clear();
@@ -304,7 +304,7 @@ public class PhaseManager : MonoBehaviour {
         {
             GameObject character1 = spawnedNPCs[i];
             character1.GetComponent<NPCController>().label.enabled = false;
-            character1.SetActive(false);
+            Destroy(character1);
             Debug.Log("Deleted");
         }
         spawnedNPCs.Clear();
@@ -325,7 +325,7 @@ public class PhaseManager : MonoBehaviour {
         {
             GameObject character1 = spawnedNPCs[i];
             character1.GetComponent<NPCController>().label.enabled = false;
-            character1.SetActive(false);
+            Destroy(character1);
             Debug.Log("Deleted");
         }
         spawnedNPCs.Clear();
@@ -418,7 +418,8 @@ public class PhaseManager : MonoBehaviour {
         spawnedNPCs[0].GetComponent<NPCController>().mapState = 0;
         GameObject wolf = spawnedNPCs[1];
         spawnedNPCs.RemoveAt(1);
-        wolf.SetActive(false);
+        wolf.GetComponent<NPCController>().label.enabled = false;
+        Destroy(wolf);
         if (autoPlay)
         {
             Invoke("Number4", 5);

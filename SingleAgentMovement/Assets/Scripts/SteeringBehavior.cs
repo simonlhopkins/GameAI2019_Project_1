@@ -113,10 +113,10 @@ public class SteeringBehavior : MonoBehaviour {
         //float targetAngularAcceleration = target.a
         //anicipate 3 frames ahead
         //refactor with global vars
-
+        Vector3 returnVelocity;
         float acceleration = 0.5f;
-        Vector3 anticipatedTargetPos = target.position + (target.velocity * 1f);
-        Vector3 desiredVel = anticipatedTargetPos - agent.position;
+        //Vector3 anticipatedTargetPos = target.position + (target.velocity * 1f);
+        Vector3 desiredVel = target.position - agent.position;
         // Should draw the circle around the target where we slow down
         gameObject.GetComponent<NPCController>().DrawCircle(target.position, slowRadiusL);
         float distanceToTarget = (desiredVel).magnitude;
@@ -129,15 +129,18 @@ public class SteeringBehavior : MonoBehaviour {
         if (distanceToTarget < slowRadiusL){
             // Inside the slowing area
             Debug.Log("INSIDE RADIUS: "+ (agent.velocity - desiredVel)/Time.deltaTime);
-            desiredVel = Vector3.Normalize(desiredVel) * maxSpeed * (distanceToTarget / slowRadiusL);
+            float targetSpeed = maxSpeed * (distanceToTarget / slowRadiusL);
             //(distanceToTarget / slowRadiusL) percent of the way you are there
             //
+            desiredVel = desiredVel.normalized;
+            desiredVel *= targetSpeed;
 
-            acceleration = -0.2f;
-            if (currentVel.magnitude < 0.1f)
-            {
-                return new SteeringData(Vector3.zero, 0);
-            }
+            returnVelocity = desiredVel - agent.velocity;
+            returnVelocity /= timeToTarget;
+            returnVelocity *= 10f;
+            acceleration = 1f;
+            return new SteeringData(returnVelocity, acceleration);
+
         }
         else{
             // Outside the slowing area.
@@ -150,8 +153,7 @@ public class SteeringBehavior : MonoBehaviour {
         Vector3 steeringVel = desiredVel - currentVel;
         gameObject.GetComponent<NPCController>().DrawCircle(steeringVel, targetRadiusL);
 
-
-        Vector3 returnVelocity = currentVel + steeringVel;
+        returnVelocity = currentVel + steeringVel;
 
 
         agent.rotation = face();

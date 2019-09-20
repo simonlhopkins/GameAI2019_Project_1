@@ -242,7 +242,7 @@ public class PhaseManager : MonoBehaviour {
         GameObject character = SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 0);
         spawnedNPCs.Add(character);
         character.GetComponent<NPCController>().label.enabled = true;
-        Invoke("Number1", 5);
+        Invoke("Number1", 1);
     }
 
     private void Number1()
@@ -251,14 +251,14 @@ public class PhaseManager : MonoBehaviour {
         GameObject character = SpawnItem(spawner2, WolfPrefab, null, SpawnText2, 7);
         spawnedNPCs.Add(character);
         character.GetComponent<NPCController>().label.enabled = true;
-        Invoke("Number2", 15);
+        Invoke("Number2", 1);
     }
     private void Number2 ()
     {
         narrator.text = "The hunter begins chasing its prey. The prey flees, but is ultimately trapped by the hunter.";
         spawnedNPCs[0].GetComponent<NPCController>().NewTarget(spawnedNPCs[1].GetComponent<NPCController>());
         //sets the map state of the hunter to 1, which is seeking the target
-        spawnedNPCs[0].GetComponent<NPCController>().mapState = 1;
+        spawnedNPCs[0].GetComponent<NPCController>().mapState = 3;
         //sets the target of the wolf to the hunter
         spawnedNPCs[1].GetComponent<NPCController>().NewTarget(spawnedNPCs[0].GetComponent<NPCController>());
         //sets the map state of the wolf to flee from the hunter

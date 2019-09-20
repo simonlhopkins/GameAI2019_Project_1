@@ -152,10 +152,38 @@ public class SteeringBehavior : MonoBehaviour {
         //could return an object
         return new SteeringData(returnVelocity, acceleration); ;
     }
-
     public SteeringData Evade()
     {
-        
+        //target
+        //float targetAngularAcceleration = target.a
+        //anicipate 3 frames ahead
+        //refactor with global vars
+        Vector3 returnVelocity;
+        float acceleration = 0.5f;
+        //Vector3 anticipatedTargetPos = target.position + (target.velocity * 1f);
+        Vector3 desiredVel = target.position - agent.position;
+        // Should draw the circle around the target where we slow down
+        gameObject.GetComponent<NPCController>().DrawCircle(target.position, slowRadiusL);
+        float distanceToTarget = (desiredVel).magnitude;
+
+
+
+        //Debug.Log(distanceToTarget);
+        Vector3 currentVel = agent.velocity;
+
+        desiredVel = Vector3.Normalize(desiredVel) * maxSpeed;
+
+        // Set the steering based on this
+        //steering
+        Vector3 steeringVel = desiredVel - currentVel;
+        gameObject.GetComponent<NPCController>().DrawCircle(steeringVel, targetRadiusL);
+
+        returnVelocity = currentVel + steeringVel;
+
+
+        agent.rotation = face();
+        //could return an object
+        return new SteeringData(returnVelocity, acceleration); ;
     }
 
 

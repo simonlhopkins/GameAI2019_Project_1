@@ -150,7 +150,7 @@ MonoBehaviour:
   maxAcceleration: 3
   maxSpeed: 3
   targetRadiusL: 2
-  slowRadiusL: 5
+  slowRadiusL: 3
   timeToTarget: 0.1
   maxRotation: 4
   maxAngularAcceleration: 4

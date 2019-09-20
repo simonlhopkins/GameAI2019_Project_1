@@ -57,23 +57,6 @@ public class SteeringBehavior : MonoBehaviour {
         target = newTarget;
     }
 
-    public float Orient(float currentOrientation, Vector3 velocity)
-    {
-
-        //Debug.DrawRay(transform.position, velocity*5f, Color.red);
-        if (velocity.magnitude > 0)
-        {
-            //Debug.Log(Mathf.Rad2Deg * Mathf.Atan2(velocity.x, velocity.z));
-            return Mathf.Rad2Deg*Mathf.Atan2(velocity.x, velocity.z);
-
-        }
-        else
-        {
-            //Debug.Log("fail");
-            return currentOrientation;
-        }
-    }
-
     public SteeringData Seek()
     {
 
@@ -163,21 +146,12 @@ public class SteeringBehavior : MonoBehaviour {
     {
         
     }
+*/
 
-    public Vector3 Align()
-    {
-
-    }
-
-    public Vector3 Face()
-    {
-
-    }
-    */
     public SteeringData Wander(Vector3 current)
     {
 
-        float acceleration = 0.1f;
+        float acceleration = 0.5f;
         startTime += Time.deltaTime;
         if(startTime <= wanderRate)
         {
@@ -205,6 +179,8 @@ public class SteeringBehavior : MonoBehaviour {
         //gameObject.GetComponent<NPCController>().DrawLine(transform.position, follow.transform.position);
         Destroy(follow);
         Destroy(middle);
+        Vector3 direction = follow.transform.position - agent.position;
+        agent.rotation = Mathf.Atan2(-direction.x, direction.z) * Mathf.Rad2Deg;
         return new SteeringData(velocity, acceleration);
     }
 

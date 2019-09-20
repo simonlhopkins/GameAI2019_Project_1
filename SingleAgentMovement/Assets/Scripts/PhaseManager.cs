@@ -68,14 +68,16 @@ public class PhaseManager : MonoBehaviour {
     /// to do. For each case you may well have more than one thing to do.
     /// </summary>
     private void Update() {
-
-        string inputstring = Input.inputString;
-        int num;
         if (Input.GetKeyDown(KeyCode.Space))
         {
             autoPlay = true;
+            previousMapState = currentMapState;
+            currentMapState = 1;
+            Number1();
+            return;
         }
-
+        string inputstring = Input.inputString;
+        int num;
         // Look for a number key click
         if (inputstring.Length > 0)
         {
@@ -87,7 +89,7 @@ public class PhaseManager : MonoBehaviour {
                 {
                     previousMapState = currentMapState;
                     currentMapState = num;
-                    //autoPlay = false;
+                    autoPlay = false;
                 }
             }
         }
@@ -212,6 +214,9 @@ public class PhaseManager : MonoBehaviour {
         }
         spawnedNPCs.Clear();
         GameObject character = SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 0);
+        spawnedNPCs.Add(character);
+        character.GetComponent<NPCController>().label.enabled = true;
+        character = SpawnItem(spawner2, WolfPrefab, null, SpawnText2, 0);
         spawnedNPCs.Add(character);
         character.GetComponent<NPCController>().label.enabled = true;
         Number3();
@@ -389,7 +394,7 @@ public class PhaseManager : MonoBehaviour {
         character.GetComponent<NPCController>().label.enabled = true;
         if (autoPlay)
         {
-            Invoke("Number2", 10);
+            Invoke("Number2", 5);
         }
     }
     private void Number2 ()
@@ -404,7 +409,7 @@ public class PhaseManager : MonoBehaviour {
         spawnedNPCs[1].GetComponent<NPCController>().mapState = 2;
         if (autoPlay)
         {
-            Invoke("Number3", 10);
+            Invoke("Number3", 5);
         }
     }
     private void Number3()
@@ -427,7 +432,7 @@ public class PhaseManager : MonoBehaviour {
         spawnedNPCs[1].GetComponent<NPCController>().NewTarget(spawnedNPCs[0].GetComponent<NPCController>());
         if (autoPlay)
         {
-            Invoke("Number5", 10);
+            Invoke("Number5", 5);
         }
     }
 
@@ -438,7 +443,7 @@ public class PhaseManager : MonoBehaviour {
         spawnedNPCs[0].GetComponent<NPCController>().mapState = 1;
         if (autoPlay)
         {
-            Invoke("Number6", 7);
+            Invoke("Number6", 5);
         }
     }
 
@@ -448,7 +453,7 @@ public class PhaseManager : MonoBehaviour {
         spawnedNPCs[1].GetComponent<NPCController>().mapState = 4; // this should the evade algorithm
         if (autoPlay)
         {
-            Invoke("Number7", 7);
+            Invoke("Number7", 5);
         }
     }
 

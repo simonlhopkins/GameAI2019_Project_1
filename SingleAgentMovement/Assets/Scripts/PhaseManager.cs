@@ -39,7 +39,7 @@ public class PhaseManager : MonoBehaviour {
     public GameObject spawner3;
     public Text SpawnText3;
  
-    private List<GameObject> spawnedNPCs;   // When you need to iterate over a number of agents.
+    public List<GameObject> spawnedNPCs;   // When you need to iterate over a number of agents.
     
     private int currentMapState = 0;           // This stores which state the map or level is in.
     private int previousMapState = 0;          // The map state we were just in
@@ -76,6 +76,8 @@ public class PhaseManager : MonoBehaviour {
             Number1();
             return;
         }
+
+
         string inputstring = Input.inputString;
         int num;
         // Look for a number key click
@@ -87,63 +89,63 @@ public class PhaseManager : MonoBehaviour {
             {
                 if (num != currentMapState)
                 {
-                    previousMapState = currentMapState;
+
                     currentMapState = num;
                     autoPlay = false;
                 }
             }
         }
-        
+
         // Check if a game event had caused a change of state in the level.
-        if (currentMapState == previousMapState)
-            return;
+        if (currentMapState == previousMapState) {
 
-       // If we get here, we've been given a new map state, from either source
-       switch (currentMapState) {
-           case 0:
-                EnterMapStateZero();
-                previousMapState = currentMapState;
-               break;
 
-           case 1:
-                EnterMapStateOne();
-                previousMapState = currentMapState;
-                break;
-
-           case 2:
-                EnterMapStateTwo();
-                previousMapState = currentMapState;
-                break;
-
-           case 3:
-                EnterMapStateThree();
-                previousMapState = currentMapState;
-                break;
-           case 4:
-                EnterMapStateFour();
-                previousMapState = currentMapState;
-                break;
-           case 5:
-                EnterMapStateFive();
-                previousMapState = currentMapState;
-                break;
-           case 6:
-                EnterMapStateSix();
-                previousMapState = currentMapState;
-                break;
-           case 7:
-                EnterMapStateSeven();
-                previousMapState = currentMapState;
-                break;
-           case 8:
-                EnterMapStateEight();
-                previousMapState = currentMapState;
-                break;
-           case 9:
-                EnterMapStateNine();
-                previousMapState = currentMapState;
-                break;
         }
+        else {
+            switch (currentMapState)
+            {
+                case 0:
+                    EnterMapStateZero();
+                    break;
+
+                case 1:
+                    EnterMapStateOne();
+                    break;
+
+                case 2:
+                    EnterMapStateTwo();
+                    break;
+
+                case 3:
+                    EnterMapStateThree();
+                    break;
+                case 4:
+                    EnterMapStateFour();
+                    break;
+                case 5:
+                    EnterMapStateFive();
+                    break;
+                case 6:
+                    EnterMapStateSix();
+                    break;
+                case 7:
+                    EnterMapStateSeven();
+                    break;
+                case 8:
+                    EnterMapStateEight();
+                    break;
+                case 9:
+                    EnterMapStateNine();
+                    break;
+            }
+        }
+
+        previousMapState = currentMapState;
+
+
+        // If we get here, we've been given a new map state, from either source
+
+
     }
 
     void Refresh()
@@ -171,22 +173,46 @@ public class PhaseManager : MonoBehaviour {
         Number0();
     }
     private void EnterMapStateOne() {
-        for (int i = spawnedNPCs.Count - 1; i >= 0; i--)
+        //destroy all of the NPCs in the scene
+        Debug.Log("map state one");
+        Debug.Log(spawnedNPCs.Count);
+        for (int i = 0; i < spawnedNPCs.Count; i++)
         {
-            GameObject character1 = spawnedNPCs[i];
-            character1.GetComponent<NPCController>().label.enabled = false;
-            character1.SetActive(false);
-            Debug.Log("Deleted");
+            Debug.Log(spawnedNPCs.Count + "<count i> " + i);
+            if(spawnedNPCs[i] == null) {
+                continue;
+            }
+            Destroy(spawnedNPCs[i]);
         }
         spawnedNPCs.Clear();
+
         GameObject character = SpawnItem(spawner1, HunterPrefab, null, SpawnText1, 0);
+        GameObject wolf = SpawnItem(spawner2, WolfPrefab, null, SpawnText1, 0);
         spawnedNPCs.Add(character);
-        character.GetComponent<NPCController>().label.enabled = true;
-        Number1();
-        Debug.Log("Doing it");
+        spawnedNPCs.Add(wolf);
+
+        NPCController charNPCcontroller = character.GetComponent<NPCController>();
+        NPCController wolfNPCcontroller = wolf.GetComponent<NPCController>();
+
+        charNPCcontroller.NewTarget(wolfNPCcontroller);
+        wolfNPCcontroller.NewTarget(charNPCcontroller);
+
+
+        charNPCcontroller.mapState = 1;
+        wolfNPCcontroller.mapState = 2;
+
+
+
+
+
     }
     private void EnterMapStateTwo()
     {
+
+
+
+
+
         for (int i = spawnedNPCs.Count - 1; i >= 0; i--)
         {
             GameObject character1 = spawnedNPCs[i];
@@ -203,6 +229,7 @@ public class PhaseManager : MonoBehaviour {
         character.GetComponent<NPCController>().label.enabled = true;
         Number2();
     }
+
     private void EnterMapStateThree()
     {
         for (int i = spawnedNPCs.Count - 1; i >= 0; i--)

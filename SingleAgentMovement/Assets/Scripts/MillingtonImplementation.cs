@@ -63,20 +63,23 @@ public class MillingtonImplementation : MonoBehaviour
         enemyK.position = target.gameObject.GetComponent<Rigidbody>().position;
 
 
+        Align playerAlign = new Align(playerK, enemyK, maxAngularAcceleration, maxRotation, targetRadius, slowRadius);
+        Face playerFace = new Face(enemyK, playerAlign);
+        playerSO = new Wander(wanderOffset, wanderRadius, wanderRate, maxAcceleration, playerFace).getSteering();
 
         //playerSO = new DynamicSeek(playerK, enemyK, maxAcceleration).getSteering();
         //playerSO = new Arrive(playerK, enemyK, maxAcceleration, maxSpeed, targetRadius, slowRadius).getSteering();
-        Align playerAlign = new Align(playerK, enemyK, maxAngularAcceleration, maxRotation,
-        targetRadius, slowRadius);
+        //Align playerAlign = new Align(playerK, enemyK, maxAngularAcceleration, maxRotation,
+        //targetRadius, slowRadius);
 
-        Align enemyAlign = new Align(enemyK, playerK, maxAngularAcceleration, maxRotation,
-        targetRadius, slowRadius);
+        //Align enemyAlign = new Align(enemyK, playerK, maxAngularAcceleration, maxRotation,
+        //targetRadius, slowRadius);
 
-        Face enemyFace = new Face(new Kinematic(), enemyAlign);
+        //Face enemyFace = new Face(new Kinematic(), enemyAlign);
 
-        playerSO = new Face(enemyK, playerAlign).getSteering();
+        //playerSO = new Face(enemyK, playerAlign).getSteering();
 
-        enemySO = new Wander(wanderOffset,wanderRadius, wanderRate, maxAcceleration, enemyFace).getSteering();
+        //enemySO = new Wander(wanderOffset,wanderRadius, wanderRate, maxAcceleration, enemyFace).getSteering();
 
         //playerSO = new Pursue(playerK, enemyK, maxAcceleration, maxPrediction).getSteering();
 
@@ -84,6 +87,17 @@ public class MillingtonImplementation : MonoBehaviour
 
         //playerK.rotation = Mathf.Atan2(-playerK.velocity.x, playerK.velocity.z);
         //enemyK.rotation = Mathf.Atan2(-enemyK.velocity.x, enemyK.velocity.z);
+
+        if (Input.GetKeyDown(KeyCode.F)) { 
+            playerSO = new DynamicSeek(playerK, enemyK, maxAcceleration).getSteering();
+            enemySO = new Evade(enemyK, playerK, maxAcceleration, maxPrediction).getSteering();
+        }
+        else if (Input.GetKeyDown(KeyCode.W))
+        {
+
+            enemySO = empty;
+        }
+
 
 
 

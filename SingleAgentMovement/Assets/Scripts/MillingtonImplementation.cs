@@ -47,9 +47,7 @@ public class MillingtonImplementation : MonoBehaviour
 
         playerSO = new SteeringOutput();
         enemySO = new SteeringOutput();
-
-        Debug.Log(playerK.orientation +", "+ enemyK.orientation);
-
+        
     }
 
     // Update is called once per frame
@@ -57,39 +55,18 @@ public class MillingtonImplementation : MonoBehaviour
 
     void Update()
     {
-        empty.linear = Vector3.zero;
-        empty.angular = 0;
         playerK.position = player.gameObject.GetComponent<Rigidbody>().position;
         enemyK.position = target.gameObject.GetComponent<Rigidbody>().position;
 
 
-
-
-        //playerK.rotation = Mathf.Atan2(-playerK.velocity.x, playerK.velocity.z);
-        //enemyK.rotation = Mathf.Atan2(-enemyK.velocity.x, enemyK.velocity.z);
-
-        if (Input.GetKeyDown(KeyCode.F)) { 
-            playerSO = new DynamicSeek(playerK, enemyK, maxAcceleration).getSteering();
-        }
-        else if (Input.GetKeyDown(KeyCode.W))
-        {
-
-            enemySO = empty;
-        }
-
-
-
+        DynamicAlign a = new DynamicAlign(playerK, enemyK, maxAcceleration, maxRotation, targetRadius, slowRadius);
+        playerSO = new DynamicSeek(playerK, enemyK, maxAcceleration).getSteering();
 
         playerK.Update(playerSO, maxSpeed, Time.deltaTime);
         enemyK.Update(enemySO, maxSpeed, Time.deltaTime);
 
 
 
-
-
-        Debug.DrawLine(playerK.position, enemyK.position, Color.cyan);
-        Debug.DrawRay(playerK.position, playerSO.linear * 5f, Color.red);
-        Debug.DrawRay(enemyK.position, enemySO.linear * 5f, Color.red);
 
         //update player
         player.gameObject.GetComponent<Rigidbody>().position = playerK.position;
@@ -120,14 +97,19 @@ public struct Kinematic
 
         if(velocity.magnitude > _maxSpeed)
         {
-            Debug.Log("velocity.magnitude > maxSpeed");
             Debug.Log(_maxSpeed);
             velocity.Normalize();
             velocity *= _maxSpeed;
         }
 
-        Debug.Log(position + " + " + velocity);
+        Debug.DrawRay(position, asVector(orientation) * 10f, Color.yellow);
+        Debug.DrawRay(position, velocity * 2f, Color.green);
 
+    }
+
+    private Vector3 asVector(float _orientation)
+    {
+        return new Vector3(Mathf.Sin(_orientation), 0f, Mathf.Cos(_orientation));
     }
 }
 
@@ -151,6 +133,7 @@ public class DynamicSeek{
     public SteeringOutput getSteering() {
         SteeringOutput steering = new SteeringOutput();
         steering.linear = target.position - character.position;
+
         steering.linear.Normalize();
         steering.linear *= maxAcceleration;
         steering.angular = 0;
@@ -181,7 +164,7 @@ public class DynamicFlee
     }
 }
 
-public class Arrive {
+public class DynamicArrive {
     Kinematic character;
     Kinematic target;
     float maxAcceleration;
@@ -189,7 +172,7 @@ public class Arrive {
     float targetRadius;
     float slowRadius;
     float timeToTarget = 0.1f;
-    public Arrive(Kinematic _character, Kinematic _target, float _maxAcceleration, float _maxSpeed,
+    public DynamicArrive(Kinematic _character, Kinematic _target, float _maxAcceleration, float _maxSpeed,
             float _targetRadius, float _slowRadius)
     {
         character = _character;
@@ -208,7 +191,7 @@ public class Arrive {
         if (distance < targetRadius)
         {
             Debug.Log("INSIDE!!!");
-            steering.linear = Vector3.zero;
+            steering.linear = -character.velocity;
             steering.angular = 0;
             return steering;
         }
@@ -218,7 +201,8 @@ public class Arrive {
             targetSpeed = maxSpeed;
         }
         else {
-            targetSpeed = maxSpeed * distance / slowRadius;
+            Debug.Log("inside slow radius!!! :" + distance / slowRadius);
+            targetSpeed = maxSpeed * (distance / slowRadius);
         }
 
         Vector3 targetVelocity = direction;
@@ -265,7 +249,6 @@ public class DynamicAlign {
 
         float rotation = target.orientation - character.orientation;
         rotation = Mathf.Clamp(rotation, -Mathf.PI, Mathf.PI);
-        Debug.Log("rotation:" + rotation);
         float rotationSize = Mathf.Abs(rotation);
 
 
@@ -299,14 +282,13 @@ public class DynamicAlign {
         steering.angular /= timeToTarget;
 
         float angularAcceleration = Mathf.Abs(steering.angular);
-        if(angularAcceleration > maxAngularAcceleration) {
+        if (angularAcceleration > maxAngularAcceleration) {
             steering.angular /= angularAcceleration;
             steering.angular *= maxAngularAcceleration;
         }
 
         steering.linear = Vector3.zero;
 
-        Debug.Log(steering.angular);
         return steering;
     }
 
@@ -423,10 +405,10 @@ class DynamicWander {
     float wanderRadius;
 
     float wanderRate;
-    float wanderOrientation = 0;
+    float wanderOrientation;
 
     float maxAcceleration;
-
+    
     DynamicFace f;
 
     public DynamicWander(float _wanderOffset, float _wanderRadius, float _wanderRate,
@@ -437,7 +419,7 @@ class DynamicWander {
         wanderRate = _wanderRate;
         maxAcceleration = _maxAcceleration;
         f = _f;
-        wanderOrientation = f.a.character.orientation;
+        //wanderOrientation = f.a.character.orientation;
     }
     private float randomBinomial() {
         return Random.value - Random.value;
@@ -449,20 +431,42 @@ class DynamicWander {
 
     public SteeringOutput getSteering() {
         wanderOrientation += randomBinomial() * wanderRate;
+
         //using face, which is using align which has the characyer;
         float targetOrientation = wanderOrientation + f.a.character.orientation;
 
-        Vector3 target = f.a.character.position + wanderOffset * asVector(f.a.character.orientation);
+        f.target.position = f.a.character.position + wanderOffset * asVector(f.a.character.orientation);
 
-        target += wanderRadius * asVector(targetOrientation);
+        f.target.position += wanderRadius * asVector(targetOrientation);
 
         SteeringOutput steering = f.getSteering();
 
         steering.linear = maxAcceleration * asVector(f.a.character.orientation);
+        Debug.DrawRay(f.a.character.position, asVector(f.a.character.orientation)* maxAcceleration, Color.blue);
+        Debug.Log("wander linear = " + steering.linear);
 
         return steering;
     }
 
-
 }
 
+//obstacle avoidance
+class ObstacleAvoidance{
+
+    public RaycastHit collisionDetector;
+    public float avoidDistance;
+    public float lookahead;
+
+    public DynamicSeek s;
+
+    public ObstacleAvoidance(RaycastHit _collisionDetector, float _avoidDistance, float _lookahead, DynamicSeek _s) {
+        collisionDetector = _collisionDetector;
+        avoidDistance = _avoidDistance;
+        lookahead = _lookahead;
+        s = _s;
+    }
+
+    //public SteeringOutput getSteering() { 
+        
+    //}
+}

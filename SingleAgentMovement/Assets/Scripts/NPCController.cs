@@ -40,8 +40,7 @@ public class NPCController : MonoBehaviour {
         line = GetComponent<LineRenderer>();
         stopped = false;
 
-
-        //intialize steering output
+        
         so = new SteeringOutput();
         k = new Kinematic
         {
@@ -72,7 +71,9 @@ public class NPCController : MonoBehaviour {
                     // do this for each phase
                     label.text = name.Replace("(Clone)", "") + "\nAt Rest";
                 }
-                
+                linear = Vector3.zero;
+                angular = 0f;
+
                 break;
             case 1:
 
@@ -84,17 +85,12 @@ public class NPCController : MonoBehaviour {
                 }
                 stopped = false;
 
-                //dynamic seek
-
-                
                 ai.SetTarget(target);
+                Debug.Log(gameObject.name + " target " + target.gameObject.name);
                 linear = ai.Seek().linear;
                 angular = ai.Seek().angular;
 
 
-                //linear = ai.Seek();
-                //angular = ai.Face(rotation,linear);
-                //Debug.Log(angular);
                 break;
 
             case 2:
@@ -103,12 +99,6 @@ public class NPCController : MonoBehaviour {
                     label.text = name.Replace("(Clone)", "") + "\nAlgorithm: Dynamic Flee";
                 }
                 stopped = false;
-                ai.SetTarget(target);
-                //linear = ai.Flee();
-                //angular = ai.Face(orientation, linear);
-                //this is the new velocity that is added, which 
-                //pass in the current velocity, and it will return a new velocity based on that
-                //Debug.Log(velocity);
 
                 linear = ai.Flee().linear;
                 angular = ai.Flee().angular;
@@ -121,8 +111,7 @@ public class NPCController : MonoBehaviour {
                 }
                 stopped = false;
                 //persue with arrive
-                ai.SetTarget(target);
-                //velocity = ai.PursueArrive();
+
 
                 linear = ai.Pursue().linear;
                 angular = ai.Pursue().angular;
@@ -144,13 +133,13 @@ public class NPCController : MonoBehaviour {
                 angular = ai.Evade().angular;
                 break;
             case 5:
+
+                //SEEK with FACE
                 if (label) {
                     label.text = name.Replace("(Clone)", "") + "\nAlgorithm: Dynamic Align";
                 }
                 stopped = false;
                 ai.SetTarget(target);
-                // linear = ai.whatever();  -- replace with the desired calls
-                // angular = ai.whatever();
 
                 linear = ai.Seek().linear;
                 angular = ai.Face().angular;
@@ -158,15 +147,15 @@ public class NPCController : MonoBehaviour {
 
                 break;
             case 6:
+                //JUST PLAIN FACE
                 if (label)
                 {
                     label.text = name.Replace("(Clone)", "") + "\nAlgorithm: Dynamic Face";
                 }
                 stopped = false;
                 ai.SetTarget(target);
-                // linear = ai.whatever();  -- replace with the desired calls
-                // angular = ai.whatever();
-                linear = ai.Seek().linear;
+
+                linear = ai.Face().linear;
                 angular = ai.Face().angular;
 
                 break;
@@ -177,9 +166,42 @@ public class NPCController : MonoBehaviour {
                 }
                 stopped = false;
                 //rotation = ai.Face(rotation, linear);
-
+                ai.SetTarget(target);
                 linear = ai.Wander().linear;
                 angular = ai.Wander().angular;
+                break;
+            case 8:
+                if (label)
+                {
+                    label.text = name.Replace("(Clone)", "") + "\nAlgorithm: Dynamic Wander";
+                }
+                stopped = false;
+                //rotation = ai.Face(rotation, linear);
+                ai.SetTarget(target);
+                linear = ai.Pursue().linear;
+                angular = ai.Face().angular;
+                break;
+            case 9:
+                if (label)
+                {
+                    label.text = name.Replace("(Clone)", "") + "\nAlgorithm: Dynamic Wander";
+                }
+                stopped = false;
+                //rotation = ai.Face(rotation, linear);
+                ai.SetTarget(target);
+                linear = ai.Evade().linear;
+                angular = ai.Face().angular;
+                break;
+            case 10:
+                if (label)
+                {
+                    label.text = name.Replace("(Clone)", "") + "\nAlgorithm: Dynamic Wander";
+                }
+                stopped = false;
+                //rotation = ai.Face(rotation, linear);
+                ai.SetTarget(target);
+                linear = ai.Arrive().linear;
+                angular = ai.Arrive().angular;
                 break;
 
                 // ADD CASES AS NEEDED
@@ -207,11 +229,6 @@ public class NPCController : MonoBehaviour {
         k.position = rb.position;
 
         k.Update(so, maxSpeed, Time.deltaTime);
-
-        if (target) {
-            Debug.DrawLine(k.position, target.k.position, Color.cyan);
-            Debug.DrawRay(k.position, so.linear * 5f, Color.red);
-        }
 
 
         //update player

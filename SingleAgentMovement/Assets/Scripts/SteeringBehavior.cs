@@ -13,6 +13,10 @@ public class SteeringBehavior : MonoBehaviour {
     public NPCController agent;
     public NPCController target;
 
+    Kinematic agentK;
+
+
+
     // Below are a bunch of variable declarations that will be used for the next few
     // assignments. Only a few of them are needed for the first assignment.
 
@@ -45,11 +49,7 @@ public class SteeringBehavior : MonoBehaviour {
 
     protected void Start() {
         agent = GetComponent<NPCController>();
-
-        //test for debug
-        slowRadiusL = 10f;
-        timeToTarget = 3f;
-        //wanderOrientation = agent.orientation;
+        agentK = agent.k;
     }
 
     public void SetTarget(NPCController newTarget)
@@ -57,204 +57,41 @@ public class SteeringBehavior : MonoBehaviour {
         target = newTarget;
     }
 
-    public SteeringData Seek()
+    public SteeringOutput Seek()
     {
 
-        float acceleration = 0.5f;
-        Vector3 currentVel = agent.velocity;
-        Vector3 desiredVel = Vector3.Normalize(target.position - agent.position) * maxSpeed;
-        
-        Vector3 steeringVel = desiredVel - currentVel;
-        Vector3 returnVelocity = (currentVel + steeringVel).normalized * maxSpeed;
-        agent.rotation = align(target);
-
-        gameObject.GetComponent<NPCController>().DrawLine(agent.transform.position, target.position);
-        //Debug.Log(target.position);
-        Debug.DrawRay(agent.position, returnVelocity, Color.magenta);
-        return new SteeringData(returnVelocity, acceleration);
+        return new DynamicSeek(agentK, target.k, maxAcceleration).getSteering();
     }
-
-
-    public SteeringData Flee()
+    public SteeringOutput Flee()
     {
-        float acceleration = 0.5f;
-        Vector3 currentVel = agent.velocity;
-        Vector3 desiredVel = Vector3.Normalize(target.position - agent.position) * maxSpeed;
-
-        Vector3 steeringVel = desiredVel - currentVel;
-        Vector3 returnVelocity = (currentVel + steeringVel).normalized * maxSpeed;
-        agent.rotation = 180 + face();
-
-        gameObject.GetComponent<NPCController>().DrawLine(agent.transform.position, target.position);
-
-        return new SteeringData(-returnVelocity, acceleration);
+        return new DynamicFlee(agentK, target.k, maxAcceleration).getSteering();
     }
 
-    public SteeringData PursueArrive()
+    public SteeringOutput Pursue()
     {
-        //target
-        //float targetAngularAcceleration = target.a
-        //anicipate 3 frames ahead
-        //refactor with global vars
-        Vector3 returnVelocity;
-        float acceleration = 0.5f;
-        //Vector3 anticipatedTargetPos = target.position + (target.velocity * 1f);
-
-        // Should draw the circle around the target where we slow down
-        float distanceToTarget = (target.position- agent.position).magnitude;
-        float prediction;
-        if (agent.velocity.magnitude <= distanceToTarget / maxPrediction)
-        {
-            prediction = maxPrediction;
-        }
-        else {
-            prediction = distanceToTarget / agent.velocity.magnitude;
-        }
-
-        Vector3 targetPos = target.position;
-        targetPos += target.velocity * prediction;
-        gameObject.GetComponent<NPCController>().DrawCircle(targetPos, targetRadiusL);
-        Vector3 desiredVel = targetPos - agent.position;
-        //Debug.Log(distanceToTarget);
-        Vector3 currentVel = agent.velocity;
-
-        if (distanceToTarget < slowRadiusL){
-            gameObject.GetComponent<NPCController>().DrawCircle(target.position, slowRadiusL);
-            // Inside the slowing area
-            Debug.Log("INSIDE RADIUS: "+ (agent.velocity - desiredVel)/Time.deltaTime);
-            float targetSpeed = maxSpeed * (distanceToTarget / slowRadiusL);
-            //(distanceToTarget / slowRadiusL) percent of the way you are there
-            //
-            desiredVel = desiredVel.normalized;
-            desiredVel *= targetSpeed;
-
-            returnVelocity = desiredVel - agent.velocity;
-            returnVelocity /= timeToTarget;
-            returnVelocity *= 10f;
-            acceleration = 1f;
-            return new SteeringData(returnVelocity, acceleration);
-
-        }
-        else{
-            // Outside the slowing area.
-
-            desiredVel = Vector3.Normalize(desiredVel) * maxSpeed;
-        }
-
-        // Set the steering based on this
-        //steering
-        Vector3 steeringVel = desiredVel - currentVel;
-
-        returnVelocity = currentVel + steeringVel;
-
-
-        agent.rotation = face();
-        //could return an object
-        return new SteeringData(returnVelocity, acceleration);
+        return new DynamicPursue(agentK, target.k, maxAcceleration, maxPrediction).getSteering();
     }
-    public SteeringData Evade()
+    public SteeringOutput Evade()
     {
-        //target
-        //float targetAngularAcceleration = target.a
-        //anicipate 3 frames ahead
-        //refactor with global vars
-        Vector3 returnVelocity;
-        float acceleration = 0.5f;
-        //Vector3 anticipatedTargetPos = target.position + (target.velocity * 1f);
-
-        // Should draw the circle around the target where we slow down
-        gameObject.GetComponent<NPCController>().DrawCircle(target.position, slowRadiusL);
-        float distanceToTarget = (target.position - agent.position).magnitude;
-        float prediction;
-        if (agent.velocity.magnitude <= distanceToTarget / maxPrediction)
-        {
-            prediction = maxPrediction;
-        }
-        else
-        {
-            prediction = distanceToTarget / agent.velocity.magnitude;
-        }
-
-        Vector3 targetPos = target.position;
-        targetPos += target.velocity * prediction;
-        gameObject.GetComponent<NPCController>().DrawCircle(targetPos, targetRadiusL);
-        Vector3 desiredVel = targetPos - agent.position;
-        //Debug.Log(distanceToTarget);
-        Vector3 currentVel = agent.velocity;
-        desiredVel = Vector3.Normalize(desiredVel) * maxSpeed;
-        // Set the steering based on this
-        //steering
-        Vector3 steeringVel = desiredVel - currentVel;
-        returnVelocity = currentVel + steeringVel;
-        agent.rotation = 180+face();
-        //could return an object
-        return new SteeringData(-returnVelocity, acceleration);
+        return new DynamicEvade(agentK, target.k, maxAcceleration, maxPrediction).getSteering();
     }
-
-
-    public SteeringData Wander(Vector3 current)
+    public SteeringOutput Wander()
     {
-
-        float acceleration = 0.5f;
-        startTime += Time.deltaTime;
-        if(startTime <= wanderRate)
-        {
-            return new SteeringData(current, acceleration);
-        }
-        startTime = 0;
-        Vector3 center = transform.forward;
-        center.Normalize();
-        center *= wanderOffset;
-        //Debug.DrawRay(transform.position, center, Color.red);
-        GameObject middle = new GameObject();
-        //Debug.Log("Middle:");
-        middle.transform.position = new Vector3(transform.position.x + center.x, transform.position.y, transform.position.z + center.z);
-        gameObject.GetComponent<NPCController>().DrawCircle(middle.transform.position, wanderRadius);
-        //Debug.Log(middle.transform.position);
-        GameObject follow = new GameObject();
-        float angle = Random.Range(0.0f, 360.0f);
-        follow.transform.position = new Vector3(middle.transform.position.x + wanderRadius*Mathf.Sin(angle*Mathf.Deg2Rad), middle.transform.position.y, middle.transform.position.z + wanderRadius * Mathf.Cos(angle * Mathf.Deg2Rad));
-        //= Transform(transform.position.x + center.x,transform.position.y,transform.position.z + center.z);
-        Vector3 velocity = follow.transform.position - transform.position;
-        //gameObject.GetComponent<LineRenderer>().
-        Debug.DrawRay(transform.position, velocity, Color.red);
-        velocity.Normalize();
-        velocity *= maxSpeed;
-        //gameObject.GetComponent<NPCController>().DrawLine(transform.position, follow.transform.position);
-        Destroy(follow);
-        Destroy(middle);
-        Vector3 direction = follow.transform.position - agent.position;
-        agent.rotation = Mathf.Atan2(-direction.x, direction.z) * Mathf.Rad2Deg;
-        return new SteeringData(velocity, acceleration);
+        DynamicAlign a = new DynamicAlign(agentK, target.k, maxAngularAcceleration, maxRotation, targetRadiusA, slowRadiusA);
+        DynamicFace f = new DynamicFace(new Kinematic(), a);
+        return new DynamicWander(wanderOffset, wanderRadius, wanderRate, maxAcceleration, f).getSteering();
     }
 
-    public float face() {
-
-
-
-        Vector3 direction = target.position - agent.position;
-
-
-        return Mathf.Atan2(-direction.x, direction.z) * Mathf.Rad2Deg;
+    public SteeringOutput Face() {
+        DynamicAlign a = new DynamicAlign(agentK, target.k, maxAngularAcceleration, maxRotation, targetRadiusA, slowRadiusA);
+        return new DynamicFace(target.k, a).getSteering();
     }
 
-    public float align(NPCController target) {
-
-        return target.rotation;
+    public SteeringOutput Align() {
+        return new DynamicAlign(agentK, target.k, maxAngularAcceleration, maxRotation, targetRadiusA, slowRadiusA).getSteering();
     }
 
 
-
-}
-
-public class SteeringData
-{
-    public Vector3 velocity;
-    public float acceleration;
-    public SteeringData(Vector3 _velocity, float _acceleration) {
-        velocity = _velocity;
-        acceleration = _acceleration;
-    }
 
 }
 

@@ -30,13 +30,27 @@ public class NPCController : MonoBehaviour {
 
     bool stopped;
 
+
+    public Kinematic k;
+    public SteeringOutput so;
+
     private void Start() {
         ai = GetComponent<SteeringBehavior>();
         rb = GetComponent<Rigidbody>();
         line = GetComponent<LineRenderer>();
-        position = rb.position;
-        orientation = transform.eulerAngles.y;
         stopped = false;
+
+
+        //intialize steering output
+        so = new SteeringOutput();
+        k = new Kinematic
+        {
+            position = rb.position,
+            velocity = Vector3.zero,
+            orientation = Mathf.Deg2Rad * rb.rotation.eulerAngles.y
+        };
+
+
     }
 
     //sets a new target for the ai
@@ -58,9 +72,7 @@ public class NPCController : MonoBehaviour {
                     // do this for each phase
                     label.text = name.Replace("(Clone)", "") + "\nAt Rest";
                 }
-                stopped = true;
-                linear = Vector3.zero;
-                angular = 0;
+                
                 break;
             case 1:
 
@@ -71,10 +83,15 @@ public class NPCController : MonoBehaviour {
                     label.text = name.Replace("(Clone)","") + "\nAlgorithm: Dynamic Seek"; 
                 }
                 stopped = false;
-                ai.SetTarget(target);
 
-                linear = ai.Seek().velocity;
-                angular = ai.Seek().acceleration;
+                //dynamic seek
+
+                
+                ai.SetTarget(target);
+                linear = ai.Seek().linear;
+                angular = ai.Seek().angular;
+
+
                 //linear = ai.Seek();
                 //angular = ai.Face(rotation,linear);
                 //Debug.Log(angular);
@@ -93,8 +110,8 @@ public class NPCController : MonoBehaviour {
                 //pass in the current velocity, and it will return a new velocity based on that
                 //Debug.Log(velocity);
 
-                linear = ai.Flee().velocity;
-                angular = ai.Flee().acceleration;
+                linear = ai.Flee().linear;
+                angular = ai.Flee().angular;
                 break;
 
             case 3:
@@ -107,8 +124,8 @@ public class NPCController : MonoBehaviour {
                 ai.SetTarget(target);
                 //velocity = ai.PursueArrive();
 
-                linear = ai.PursueArrive().velocity;
-                angular = ai.PursueArrive().acceleration;
+                linear = ai.Pursue().linear;
+                angular = ai.Pursue().angular;
 
 
                 // linear = ai.whatever();  -- replace with the desired calls
@@ -123,8 +140,8 @@ public class NPCController : MonoBehaviour {
                 ai.SetTarget(target);
                 //velocity = ai.PursueArrive();
 
-                linear = ai.Evade().velocity;
-                angular = ai.Evade().acceleration;
+                linear = ai.Evade().linear;
+                angular = ai.Evade().angular;
                 break;
             case 5:
                 if (label) {
@@ -135,9 +152,9 @@ public class NPCController : MonoBehaviour {
                 // linear = ai.whatever();  -- replace with the desired calls
                 // angular = ai.whatever();
 
-                linear = ai.Seek().velocity;
-                angular = ai.Seek().acceleration;
-                rotation = ai.align(target);
+                linear = ai.Seek().linear;
+                angular = ai.Face().angular;
+
 
                 break;
             case 6:
@@ -149,9 +166,8 @@ public class NPCController : MonoBehaviour {
                 ai.SetTarget(target);
                 // linear = ai.whatever();  -- replace with the desired calls
                 // angular = ai.whatever();
-                linear = ai.Seek().velocity;
-                angular = ai.Seek().acceleration;
-                rotation = ai.face();
+                linear = ai.Seek().linear;
+                angular = ai.Face().angular;
 
                 break;
             case 7:
@@ -161,9 +177,9 @@ public class NPCController : MonoBehaviour {
                 }
                 stopped = false;
                 //rotation = ai.Face(rotation, linear);
-                SteeringData dataForWander = ai.Wander(linear);
-                linear = dataForWander.velocity;
-                angular = dataForWander.acceleration;
+
+                linear = ai.Wander().linear;
+                angular = ai.Wander().angular;
                 break;
 
                 // ADD CASES AS NEEDED
@@ -184,37 +200,23 @@ public class NPCController : MonoBehaviour {
     /// <param name="time"></param>
     private void UpdateMovement(Vector3 _linear, float _angular, float time) {
         // Update the orientation, velocity and rotation
-        if (stopped)
-        {
-            rb.velocity = Vector3.zero;
-            velocity = Vector3.zero;
-            return;
+
+
+        so.linear = _linear;
+        so.angular = _angular;
+        k.position = rb.position;
+
+        k.Update(so, maxSpeed, Time.deltaTime);
+
+        if (target) {
+            Debug.DrawLine(k.position, target.k.position, Color.cyan);
+            Debug.DrawRay(k.position, so.linear * 5f, Color.red);
         }
 
 
-        //rb.position += _linear * time;
-
-
-        rb.rotation = Quaternion.Euler(Vector3.up * -rotation);
-        //update the position variable to new position;
-
-
-
-
-        rb.AddForce(_linear * _angular * time, ForceMode.VelocityChange);
-        //if(rb.velocity.magnitude> maxSpeed)
-        //{
-        //    rb.velocity = Vector3.Normalize(rb.velocity) * maxSpeed;
-        //}
-        //
-        Debug.DrawRay(position, _linear, Color.magenta);
-        velocity = rb.velocity;
-        position = rb.position;
-        //if (rb.velocity.magnitude < maxSpeed) {
-        //    rb.AddForce(_linear * _angular, ForceMode.VelocityChange);
-        //}
-
-
+        //update player
+        rb.position = k.position;
+        rb.rotation = Quaternion.Euler(Vector3.up * (Mathf.Rad2Deg * -k.orientation));
 
     }
 

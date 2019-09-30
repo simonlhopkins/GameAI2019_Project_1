@@ -63,34 +63,13 @@ public class MillingtonImplementation : MonoBehaviour
         enemyK.position = target.gameObject.GetComponent<Rigidbody>().position;
 
 
-        Align playerAlign = new Align(playerK, enemyK, maxAngularAcceleration, maxRotation, targetRadius, slowRadius);
-        Face playerFace = new Face(enemyK, playerAlign);
-        playerSO = new Wander(wanderOffset, wanderRadius, wanderRate, maxAcceleration, playerFace).getSteering();
 
-        //playerSO = new DynamicSeek(playerK, enemyK, maxAcceleration).getSteering();
-        //playerSO = new Arrive(playerK, enemyK, maxAcceleration, maxSpeed, targetRadius, slowRadius).getSteering();
-        //Align playerAlign = new Align(playerK, enemyK, maxAngularAcceleration, maxRotation,
-        //targetRadius, slowRadius);
-
-        //Align enemyAlign = new Align(enemyK, playerK, maxAngularAcceleration, maxRotation,
-        //targetRadius, slowRadius);
-
-        //Face enemyFace = new Face(new Kinematic(), enemyAlign);
-
-        //playerSO = new Face(enemyK, playerAlign).getSteering();
-
-        //enemySO = new Wander(wanderOffset,wanderRadius, wanderRate, maxAcceleration, enemyFace).getSteering();
-
-        //playerSO = new Pursue(playerK, enemyK, maxAcceleration, maxPrediction).getSteering();
-
-        //enemySO = new Evade(enemyK, playerK, maxAcceleration, maxPrediction).getSteering();
 
         //playerK.rotation = Mathf.Atan2(-playerK.velocity.x, playerK.velocity.z);
         //enemyK.rotation = Mathf.Atan2(-enemyK.velocity.x, enemyK.velocity.z);
 
         if (Input.GetKeyDown(KeyCode.F)) { 
             playerSO = new DynamicSeek(playerK, enemyK, maxAcceleration).getSteering();
-            enemySO = new Evade(enemyK, playerK, maxAcceleration, maxPrediction).getSteering();
         }
         else if (Input.GetKeyDown(KeyCode.W))
         {
@@ -101,8 +80,8 @@ public class MillingtonImplementation : MonoBehaviour
 
 
 
-        playerK.Update(playerSO, Time.deltaTime);
-        enemyK.Update(enemySO, Time.deltaTime);
+        playerK.Update(playerSO, maxSpeed, Time.deltaTime);
+        enemyK.Update(enemySO, maxSpeed, Time.deltaTime);
 
 
 
@@ -130,7 +109,8 @@ public struct Kinematic
     public Vector3 velocity;
     public float rotation; //angular velocity
     public float maxSpeed;
-    public void Update(SteeringOutput steering, float time) {
+    public void Update(SteeringOutput steering, float _maxSpeed, float time) {
+
         position += velocity * time;
         //orientation + angular velocity
         orientation += rotation * time;
@@ -138,11 +118,15 @@ public struct Kinematic
         velocity += steering.linear * time;
         orientation += steering.angular * time;
 
-        if(velocity.magnitude > maxSpeed)
+        if(velocity.magnitude > _maxSpeed)
         {
+            Debug.Log("velocity.magnitude > maxSpeed");
+            Debug.Log(_maxSpeed);
             velocity.Normalize();
-            velocity *= maxSpeed;
-        }   
+            velocity *= _maxSpeed;
+        }
+
+        Debug.Log(position + " + " + velocity);
 
     }
 }
@@ -256,7 +240,7 @@ public class Arrive {
 }
 
 
-public class Align {
+public class DynamicAlign {
 
     public Kinematic character;
     public Kinematic target;
@@ -266,7 +250,7 @@ public class Align {
     public float slowRadius;
     public float timeToTarget = 0.1f;
 
-    public Align(Kinematic _character, Kinematic _target, float _maxAngularAcceleration, float _maxRotation,
+    public DynamicAlign(Kinematic _character, Kinematic _target, float _maxAngularAcceleration, float _maxRotation,
             float _targetRadius, float _slowRadius)
     {
         character = _character;
@@ -328,13 +312,13 @@ public class Align {
 
 }
 
-class Pursue {
+class DynamicPursue {
     Kinematic character;
     Kinematic target;
     float maxAcceleration;
     float maxPrediction;
     DynamicSeek ds;
-    public Pursue(Kinematic _character, Kinematic _target, float _maxAcceleration, float _maxPrediction) {
+    public DynamicPursue(Kinematic _character, Kinematic _target, float _maxAcceleration, float _maxPrediction) {
         character = _character;
         target = _target;
         maxAcceleration = _maxAcceleration;
@@ -365,14 +349,14 @@ class Pursue {
     }
 }
 
-class Evade
+class DynamicEvade
 {
     Kinematic character;
     Kinematic target;
     float maxAcceleration;
     float maxPrediction;
     DynamicFlee df;
-    public Evade(Kinematic _character, Kinematic _target, float _maxAcceleration, float _maxPrediction)
+    public DynamicEvade(Kinematic _character, Kinematic _target, float _maxAcceleration, float _maxPrediction)
     {
         character = _character;
         target = _target;
@@ -407,10 +391,10 @@ class Evade
     }
 }
 
-class Face {
+class DynamicFace {
     public Kinematic target;
-    public Align a;
-    public Face(Kinematic _target, Align _a) {
+    public DynamicAlign a;
+    public DynamicFace(Kinematic _target, DynamicAlign _a) {
         target = _target;
         a = _a;
     }
@@ -434,7 +418,7 @@ class Face {
 }
 
 
-class Wander {
+class DynamicWander {
     float wanderOffset;
     float wanderRadius;
 
@@ -443,10 +427,10 @@ class Wander {
 
     float maxAcceleration;
 
-    Face f;
+    DynamicFace f;
 
-    public Wander(float _wanderOffset, float _wanderRadius, float _wanderRate,
-                                 float _maxAcceleration, Face _f)
+    public DynamicWander(float _wanderOffset, float _wanderRadius, float _wanderRate,
+                                 float _maxAcceleration, DynamicFace _f)
     {
         wanderOffset = _wanderOffset;
         wanderRadius = _wanderRadius;
